@@ -106,11 +106,11 @@ class UserRepository:
         if self.check_for_duplicate_registration(email=email) and email not in ["", None]:
             errors.append("Email is already registered")
         # Check for valid email
-        if "@" not in email:
+        if "@" not in email and email not in ["", None]:
             errors.append("Invalid email address")
 
         # Check for length of password to be 8 chars or longer
-        if len(password1) <8:
+        if len(password1) < 8 and password1 not in ["", None]:
             errors.append("Password must be 8 chars or longer")
         # TODO: Add additional rules for password such as needing one num, one special char, one lowercase letter, one upper case letter
         # Check for password and confirm password to be the same

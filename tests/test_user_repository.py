@@ -50,21 +50,27 @@ def test_check_registration_duplicate(db_connection):
     db_connection.seed("seeds/makers_bnb.sql")
     repository = UserRepository(db_connection)
 
-    assert repository.check_for_duplicate_registration("notarepeatemail@gmail.com") == []
-    assert repository.check_for_duplicate_registration("dan@email.com") == ["Email is already registered with an account"]
+    assert repository.check_for_duplicate_registration("notarepeatemail@gmail.com") == False
+    assert repository.check_for_duplicate_registration("dan@email.com") == True
 
-def test_is_valid(db_connection):
+def test_check_for_errors(db_connection):
     db_connection.seed("seeds/makers_bnb.sql")
     repository = UserRepository(db_connection)
 
-    assert repository.is_valid("", "") == ["Email cannot be empty", "Password cannot be empty"]
-    assert repository.is_valid("notavalidemail", "pw2short") == ["Invalid email address", "Password must be 8 chars or longer"]
+    assert repository.check_for_errors(email="", password1="", password2="") == True
+    assert repository.check_for_errors(email="notanemail", password1="blahblah", password2="blahblah") == True
+    assert repository.check_for_errors(email="dan@email.com", password1="blahblah", password2="blahblah") == True
+    assert repository.check_for_errors(email="new_user@test.com", password1="blahblahblah", password2="notamatch") == True
+    assert repository.check_for_errors(email="new_user@test.com", password1="tooshrt", password2="blahblahblah") == True
+
 
 def test_generate_errors(db_connection):
     db_connection.seed("seeds/makers_bnb.sql")
     repository = UserRepository(db_connection)
-
-    assert repository.generate_errors([]) == None
+    assert repository.generate_errors(email="", password1="", password2="") == "Email cannot be empty, Password cannot be empty"
+    assert repository.generate_errors(email="notanemail", password1="blahblah", password2="blahblah") == "Invalid email address"
+    assert repository.generate_errors(email="dan@email.com", password1="blahblah", password2="blahb") == "Email is already registered, Confirm password must be the same as password"
+    assert repository.generate_errors(email="new_user@test.com", password1="tooshrt", password2="tooshrt") == "Password must be 8 chars or longer"
 
 def test_delete_user(db_connection):
     db_connection.seed("seeds/makers_bnb.sql")
