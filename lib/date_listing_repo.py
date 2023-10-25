@@ -54,12 +54,11 @@ class DateListingRepo:
     #     rows = self._connection.execute(query, params)
     #     return self.generate_single_datelisting(rows)
 
-
-
     # == CREATE NEW USER & ERRORS =============
 
     # Create a new datelisting, returning datelisting id
     # NOTE using create with fields instead of DateListing object for ease of error handling.
+    
     def create(self, date_available, listing_id, requester_id):
         query = 'INSERT INTO dates_listings (date_available, listing_id, requester_id) VALUES (%s, %s, %s) RETURNING id'
         params = [date_available, listing_id, requester_id]
