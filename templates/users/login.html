@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Makersbnb</title>
+    <title>Login | Makersbnb</title>
     <!-- LINK CSS STYLESHEET FOR LATER -->
     <link rel="stylesheet" href="/style.css" />
 </head>
@@ -17,29 +17,19 @@
     </div>
     <!-- HEADER -->
 
-    <!-- AIRBNB COPY -->
-    <div class="airbnb_copy">
-        <h1 class="airbnb_copy_slogan">Feel at home, anywhere!</h1>
-        <p class="airbnb_copy_text">
-            Feel at home wherever you travel with Makersbnb.<br>
-            Makersbnb opens the door to interesting homes and experiences.<br>
-        </p>
-    </div>
-    <!-- AIRBNB COPY -->
-
     <br>
     <br>
 
-    <!-- SIGN UP FORM -->
-    <div class="sign_up_form">
-        <h2 class="sign_up_form_header">Sign up to Makersbnb</h2>
-        <form class="sign_up_form_fields" action="/" method="post">
+    <!-- LOG IN FORM -->
+    <div class="login_form">
+        <h2 class="login_form_header">Log in to Makersbnb</h2>
+        <form class="login_form_fields" action="/login" method="post">
 
         <!-- We check to see if there are any errors from a previous submission -->
         {% if errors %}
             <!-- If so, we show them. -->
             <p class="t-errors">
-                There were errors with your submission: <br>{{ errors }}
+                Login Error: <br>{{ errors }}
             </p>
         {% endif %}
 
@@ -49,23 +39,19 @@
             <input type="text" name="email" id="email">
         </p>
         <p>
-            <label for="password1">Password</label>
-            <input type="text" name="password1" id="password1">
-        </p>
-        <p>
-            <label for="password2">Confirm Password</label>
-            <input type="text" name="password2" id="password2">
+            <label for="password">Password</label>
+            <input type="text" name="password" id="password">
         </p>
 
         <!-- SUBMIT BUTTON -->
         <p>
-            <input type="submit" value="Sign up">
+            <input type="submit" value="Log in">
         </p>
 
 
         </form>
     </div>
-    <!-- SIGN UP FORM -->
+    <!-- LOG IN FORM -->
 
 
     

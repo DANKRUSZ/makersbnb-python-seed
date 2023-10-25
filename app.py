@@ -1,11 +1,12 @@
 import os
-from flask import Flask, request, render_template, session, redirect
+from flask import Flask, request, render_template, session, redirect, url_for
 from lib.database_connection import get_flask_database_connection
 from lib.user_repository import UserRepository, User
 
 
 # Create a new Flask app
 app = Flask(__name__)
+app.secret_key = "secret_key" ##CHANGE THIS
 
 # ======== ABOUT ====================== #
 # About -- Project description
@@ -16,17 +17,15 @@ def about():
 
 # ======== HOMEPAGE & SIGNING UP ====================== #
 
-# TODO: Claire - TESTING
 # Homepage -- Sign Up OR All Listings if User is logged in.
 @app.route('/')
 def homepage():
-    # user is not loggedin
-    if 'user_id' not in session:
-        return render_template('users/signup.html')
-
-    # redirect to all spaces if user is logged in
-    else:
+    # User in session
+    if session.get('user_id') is not None:
         return redirect('/spaces') 
+
+    else:
+        return render_template('users/signup.html')
 
 # Signup_Post -- Creating a new acc
 @app.route('/', methods=['POST'])
@@ -38,13 +37,10 @@ def signup_post(): #aka create new user
     password1 = request.form['password1']
     password2 = request.form['password2']
 
-    # CHECK FOR ENTRY FIELDS VALIDITY: ####
-
     # check for errors:
     if user_repository.check_for_errors(email, password1, password2):
         return render_template('users/signup.html', errors=user_repository.generate_errors(email, password1, password2)), 400
     
-
     user = user_repository.create(email=email, password=password1)
     print(f"User successfully registered: {user}") #print to check if #create worked
     return redirect('/spaces') #redirect to all spaces if successful
@@ -52,36 +48,44 @@ def signup_post(): #aka create new user
 
 # ======== AUTHENTICATION ROUTES ====================== #
 
-# TODO: Claire - write & test
 # Login Page
 @app.route('/login')
 def login():
-    return "TODO!"
-    # return render_template('login.html')
+    return render_template('users/login.html')
 
 # Login_Post
 @app.route('/login', methods=['POST'])
 def login_post():
-    # NOTE by Claire: commenting out the below, as my playwright needs a different syntax. Not sure if this is the same for everyone
+    connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
+
     email = request.form['email']
     password = request.form['password']
-
+    
     # login credentials match a user
-    if UserRepository.check_password(email, password): 
+    if user_repository.check_password(email=email, password_attempt=password): 
         # find user object with matching email
-        user = UserRepository.find_by_email(email) 
+        user = user_repository.find_by_email(email) 
         # Set the user ID in session
         session['user_id'] = user.user_id
 
         # Print to check if login is successful
-        print(f"Login successful. Session ID:{session['user_id']}")
+        print(f"app.py(79) Login successful. Session ID:{session['user_id']}")
 
         # Redirect to all spaces page
         return redirect('/spaces')
     
     else:
-        return render_template('users/login.html', errors="Invalid username or password"), 400  ##TODO change this
+        return render_template('users/login.html', errors="Invalid username or password"), 400  
 
+# Logging In_Get_Post: -- allows for button or hyperlink
+@app.route('/signout', methods=['GET','POST'])
+def signout():
+    user_id = session.get('user_id')
+    session.pop(user_id, None)
+    print(f"app.py(90) Logout successful")
+
+    return redirect('/login')
 
 
 # ======== AUTHENTICATION-ONLY ROUTES =================== #
@@ -89,12 +93,11 @@ def login_post():
 # All spaces '/spaces' ['GET']
 @app.route('/spaces')
 def all_spaces_page():
-    if 'user_id' not in session:
-        # No user id in the session so the user is not logged in.
-        return redirect('/login')
-    else:
-        # The user is logged in, display their account page.
+    # User in session
+    if session.get('user_id') is not None:
         return render_template('/spaces/all_spaces.html')
+    else:
+        return redirect('/login')
     
 
 
