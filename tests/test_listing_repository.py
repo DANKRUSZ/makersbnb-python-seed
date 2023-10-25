@@ -40,22 +40,20 @@ Testing find method,
 def test_find(db_connection):
     db_connection.seed("seeds/makers_bnb.sql")
     repository = ListingRepository(db_connection)
-
+    repository.create('House 5', 'Description5', 75.00, 2)
     assert repository.find(3) == Listing(3, 'House 3', 'Big house', 200.00, 3)
-    assert repository.find(5) == None
-
-
+    assert repository.find(6) == None
 '''
 Test find method returning multiple objects
 To be adapted
 '''
-# def test_find_by_requester_id(db_connection):
-#     db_connection.seed("seeds/makers_bnb.sql")
-#     repository = DateListingRepo(db_connection)
-
-#     assert repository.find_by_requester_id(1) == [DateListing(2, date(2023,10,24), 2, 1), DateListing(4, date(2023,10,24), 4, 1)]
-#     assert repository.find_by_requester_id(5) == []
-
+def test_find_by_owner_id(db_connection):
+    db_connection.seed("seeds/makers_bnb.sql")
+    repository = ListingRepository(db_connection)
+    repository.create('House 5', 'Description5', 75.00, 2)
+    assert repository.find_by_owner_id(2) == [
+        Listing(2, 'House 2', 'Medium house', 150.00, 2), Listing(5, 'House 5', 'Description5', 75.00, 2)]
+    assert repository.find_by_owner_id(5) == []
 
 # ======= DELETE listing======= #
 def test_delete_Listing(db_connection):
