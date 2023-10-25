@@ -81,4 +81,4 @@ class RequestRepository:
         params = [request_id]
 
         self._connection.execute(query, params)
-        pass
+        return None
