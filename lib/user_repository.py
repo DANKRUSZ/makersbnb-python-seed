@@ -62,35 +62,62 @@ class UserRepository:
         user_id = rows[0]['id']
         return user_id
 
-    # Check for duplicate email
-    def check_for_duplicate_registration(self, email:str) -> list:
+    # -------- CHECKING REGISTRATION FIELDS FOR ERRORS ----------
+
+    # Check if email is already registered to an account
+    def check_for_duplicate_registration(self, email:str) -> bool:
         errors = []
         same_email_rows = self._connection.execute('SELECT id FROM users WHERE email = %s', [email])
         if same_email_rows != []:
-            errors.append("Email is already registered with an account")
-        return errors
+            return True
+        return False
 
-    # Check if fields for creating a new user are valid
-    def is_valid(self, email:str, password:str) -> list:
+    # Check if any errors in the form -- True if any errors:
+    def check_for_errors(self, email, password1, password2):
+        error_exists = False
+        # Check for blank fields
+        if email in ["", None] or password1 in ["", None] or password2 in ["", None]:
+            error_exists = True
+        # Check for duplicate emails
+        if self.check_for_duplicate_registration(email=email):
+            error_exists = True
+        # Check for valid email
+        if "@" not in email:
+            error_exists = True
+        # Check for length of password to be 8 chars or longer
+        if len(password1) < 8:
+            error_exists = True
+        # Check for password and confirm password to be the same
+        if password1 != password2:
+            error_exists = True
+        return error_exists
+
+
+    def generate_errors(self, email, password1, password2) -> str:
         errors = []
-        if email == None or email == "":
+        # Check for blank fields:
+        if email in ["", None]:
             errors.append("Email cannot be empty")
-        elif "@" not in email: #TODO Refine this!
-            
+        if password1 in ["", None]:
+            errors.append("Password cannot be empty")
+        # Don't need to check confirm password for blanks, it just needs to match password1
+        
+        # Check for duplicate email registration:
+        if self.check_for_duplicate_registration(email=email) and email not in ["", None]:
+            errors.append("Email is already registered")
+        # Check for valid email
+        if "@" not in email:
             errors.append("Invalid email address")
 
-        if password == None or password == "":
-            errors.append("Password cannot be empty")
-        elif len(password) <= 8:
+        # Check for length of password to be 8 chars or longer
+        if len(password1) <8:
             errors.append("Password must be 8 chars or longer")
         # TODO: Add additional rules for password such as needing one num, one special char, one lowercase letter, one upper case letter
-        return errors
-
-    # Generate errors as a string #TODO add additional errors lists here such as password lenght, etc
-    def generate_errors(self, is_valid_errors) -> None or str:
-        if is_valid_errors == []:
-            return None
-        return ", ".join(is_valid_errors)
+        # Check for password and confirm password to be the same
+        if password1 != password2:
+            errors.append("Confirm password must be the same as password")
+        return ", ".join(errors)
+    
 
 
     # == CHECK PASSWORD ============================
