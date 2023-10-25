@@ -34,6 +34,8 @@ def test_create(db_connection):
     db_connection.seed("seeds/makers_bnb.sql")
     repository = UserRepository(db_connection)
 
+    #TODO Import hashlib and test with encrypted pass.
+
     assert repository.create("test_email@gmail.com", "this9ISaSTRONGp@@@Sword") == 5
     assert repository.all() == [
         User(1, 'dan@email.com', 'password'),
@@ -74,3 +76,14 @@ def test_delete_user(db_connection):
         User(3, 'claire@email.com', 'passstone'),
         User(4, 'onuora@email.com', 'passroad')
     ]
+
+# ======= LOGIN CREDENTIALS CHECK ========================
+
+#TODO Import hashlib and test with encrypted pass.
+
+def test_check_password(db_connection):
+    db_connection.seed("seeds/makers_bnb.sql")
+    repository = UserRepository(db_connection)
+
+    assert repository.check_password("dan@email.com", "password") == True
+    assert repository.check_password("dan@email.com", "woijoih") == False

@@ -45,3 +45,31 @@ class RequestRepository:
 
         rows = self._connection.execute(query, params)
         return self.generate_requests(rows)
+    
+    # ==== CREATE REQUEST ====
+
+    def create(self, date_requested, listing_id, requester_id, confirmed):
+        query = 'INSERT INTO requests (date_requested, listing_id, requester_id, confirmed) VALUES (%s, %s, %s, %s) RETURNING id'
+        params = [date_requested, listing_id, requester_id, confirmed]
+        rows = self._connection.execute(query, params)
+        request_id = rows[0]['id']
+        return request_id
+    
+    # == DELETE A REQUEST =============
+
+    # Delete a request by id
+    def delete(self, request_id) -> None:
+        query = 'DELETE FROM requests WHERE id = %s'
+        params = [request_id]
+        self._connection.execute(query, params)
+        return None
+    
+    
+    # ===== CONFIRM A REQUEST =====
+
+    def confirm(self, request_id):
+        query = 'UPDATE requests SET confirmed = True WHERE id = %s'
+        params = [request_id]
+
+        self._connection.execute(query, params)
+        return None
