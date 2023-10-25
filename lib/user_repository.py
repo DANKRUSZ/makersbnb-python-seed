@@ -76,6 +76,7 @@ class UserRepository:
         if email == None or email == "":
             errors.append("Email cannot be empty")
         elif "@" not in email: #TODO Refine this!
+            
             errors.append("Invalid email address")
 
         if password == None or password == "":
