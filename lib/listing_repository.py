@@ -33,6 +33,14 @@ class ListingRepository():
 
         rows = self._connection.execute(query, params)
         return self.generate_single_listing(rows)
+    
+
+    def find_by_owner_id(self, owner_id:int) -> Listing:
+        query = 'SELECT * FROM listings WHERE owner_id=%s'
+        params = [owner_id]
+        rows = self._connection.execute(query, params)
+        return self.generate_listings(rows)
+        
 
   # == DELETE A LISTING =============
 

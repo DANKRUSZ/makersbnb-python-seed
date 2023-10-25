@@ -73,3 +73,12 @@ class RequestRepository:
 
         self._connection.execute(query, params)
         return None
+    
+    # ===== DENY A REQUEST =====
+
+    def deny(self, request_id):
+        query = 'UPDATE requests SET confirmed = False WHERE id = %s'
+        params = [request_id]
+
+        self._connection.execute(query, params)
+        pass

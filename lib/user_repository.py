@@ -127,12 +127,13 @@ class UserRepository:
         ## TODO: HASHING PASSWORD
         # binary_password_attempt = password_attempt.encode("utf-8")
         # hashed_password_attempt = hashlib.sha256(binary_password).hexidigest()
-
         query = 'SELECT * FROM users WHERE email = %s AND password = %s'
         # params = [email, hashed_password_attempt]
         params = [email, password_attempt]
         rows = self._connection.execute(query, params)
-        return len(rows) > 0
+        if rows == []:
+            return False
+        return True
 
     def invalid_login_error(self) -> str:
         return "Invalid email and password."
