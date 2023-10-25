@@ -1,4 +1,5 @@
 from lib.users import User
+import hashlib
 
 class UserRepository:
     def __init__(self, connection):
@@ -50,7 +51,12 @@ class UserRepository:
     # Create a new user, returning user id
     # NOTE using create with fields instead of User object for ease of error handling.
     def create(self, email:str, password:str) -> int:
+        ## TODO: HASHING PASSWORD
+        # binary_password = password.encode("utf-8")
+        # hashed_password = hashlib.sha256(binary_password).hexdigest()
+
         query = 'INSERT INTO users (email, password) VALUES (%s, %s) RETURNING id'
+        # params = [email, hashed_password]
         params = [email, password]
         rows = self._connection.execute(query, params)
         user_id = rows[0]['id']
@@ -84,6 +90,24 @@ class UserRepository:
         if is_valid_errors == []:
             return None
         return ", ".join(is_valid_errors)
+
+
+    # == CHECK PASSWORD ============================
+
+    # Checks password against attempt on login page.
+    def check_password(self, email:str, password_attempt:str) -> bool:
+        ## TODO: HASHING PASSWORD
+        # binary_password_attempt = password_attempt.encode("utf-8")
+        # hashed_password_attempt = hashlib.sha256(binary_password).hexidigest()
+
+        query = 'SELECT * FROM users WHERE email = %s AND password = %s'
+        # params = [email, hashed_password_attempt]
+        params = [email, password_attempt]
+        rows = self._connection.execute(query, params)
+        return len(rows) > 0
+
+    def invalid_login_error(self) -> str:
+        return "Invalid email and password."
 
 
     # == DELETE A USER =============
