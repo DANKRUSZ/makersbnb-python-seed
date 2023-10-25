@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <!-- LINK CSS STYLESHEET FOR LATER -->
+    <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+    <!-- HEADER -- copy to every page once this image is figured out -->
+    <div class="header">
+        <!-- TODO: This image doesn't work -->
+        <img src="/makersbnb_routes_ticket/static/makers_logo_test.png" alt="Makers Logo">
+        <a class="about_link" href="/about">About</a>
+        <a class="login_link" href="/login">Login</a>
+    </div>
+    <!-- HEADER -->
+
+    <!-- AIRBNB COPY -->
+    <div class="airbnb_copy">
+        <h1 class="airbnb_copy_slogan">Feel at home, anywhere!</h1>
+        <p class="airbnb_copy_text">
+            Feel at home wherever you travel with Makersbnb.<br>
+            Makersbnb opens the door to interesting homes and experiences.<br>
+        </p>
+    </div>
+    <!-- AIRBNB COPY -->
+
+    <br>
+    <br>
+
+    <!-- SIGN UP FORM -->
+    <div class="sign_up_form">
+        <h2 class="sign_up_form_header">Sign up to Makersbnb</h2>
+        <form class="sign_up_form_fields" action="/" method="post">
+
+        <!-- We check to see if there are any errors from a previous submission -->
+        {% if errors %}
+            <!-- If so, we show them. -->
+            <p class="t-errors">
+                There were errors with your submission: <br>{{ errors }}
+            </p>
+        {% endif %}
+
+        <!-- FORM FIELDS -->
+        <p>
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email">
+        </p>
+        <p>
+            <label for="password1">Password</label>
+            <input type="text" name="password1" id="password1">
+        </p>
+        <p>
+            <label for="password2">Confirm Password</label>
+            <input type="text" name="password2" id="password2">
+        </p>
+
+        <!-- SUBMIT BUTTON -->
+        <p>
+            <input type="submit" value="Sign up">
+        </p>
+
+
+        </form>
+    </div>
+    <!-- SIGN UP FORM -->
+
+
+    
+    
+
+    
+</body>
+</html>
