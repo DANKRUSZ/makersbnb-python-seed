@@ -10,7 +10,7 @@ def test_all(db_connection):
     repository = RequestRepository(db_connection)
 
     assert repository.all() == [
-        Request(1, date(2023,10,24), 1, 3, None),
+        Request(1, date(2023,10,24), 1, 3, True),
         Request(2, date(2023,10,24), 2, 1, None),
         Request(3, date(2023,10,24), 3, 2, None),
         Request(4, date(2023,10,24), 4, 1, None)
@@ -39,7 +39,7 @@ def test_create(db_connection):
 
     assert repository.create(date(2023,10,23), 4, 3, None) == 5
     assert repository.all() == [
-        Request(1, date(2023,10,24), 1, 3, None),
+        Request(1, date(2023,10,24), 1, 3, True),
         Request(2, date(2023,10,24), 2, 1, None),
         Request(3, date(2023,10,24), 3, 2, None),
         Request(4, date(2023,10,24), 4, 1, None),
@@ -66,10 +66,10 @@ def test_confirm_request(db_connection):
     db_connection.seed("seeds/makers_bnb.sql")
     repository = RequestRepository(db_connection)
 
-    repository.confirm(1)
+    repository.confirm(2)
     assert sorted(repository.all(), key=lambda x: x.id) == [
         Request(1, date(2023,10,24), 1, 3, True),
-        Request(2, date(2023,10,24), 2, 1, None),
+        Request(2, date(2023,10,24), 2, 1, True),
         Request(3, date(2023,10,24), 3, 2, None),
         Request(4, date(2023,10,24), 4, 1, None)
     ]
