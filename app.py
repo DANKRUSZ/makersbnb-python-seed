@@ -86,10 +86,11 @@ def login_post():
 # Logging In_Get_Post: -- allows for button or hyperlink
 @app.route('/signout', methods=['GET','POST'])
 def signout():
-    user_id = session.get('user_id')
-    session.pop(user_id, None)
+    # Clear the user_id from the session
+    session.pop('user_id', None)
 
-    return redirect('/login')
+    # Redirect to the root URL or any desired URL after logout
+    return redirect('/')
 
 
 # ======== AUTHENTICATION-ONLY ROUTES =================== #
