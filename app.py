@@ -186,8 +186,13 @@ def list_a_space_post():
 ## Requests I've made, Requests I've recieved
 @app.route('/requests', methods=['GET'])
 def get_requests():
-
-    return render_template('requests/requests.html')
+    connection = get_flask_database_connection(app)
+    repository = RequestRepository(connection)
+    requester_id = session.get('user_id')
+    owner_id = session.get('user_id')
+    requests_made = repository.requests_made(requester_id)
+    requests_received = repository.requests_received(owner_id)
+    return render_template('requests/requests.html', requests_made=requests_made, requests_received=requests_received)
 
 # Single request page '/requests/<id>' ['GET']
 ## Confirm request '/requests/<id>/confirm' ['POST']
