@@ -71,3 +71,7 @@ INSERT INTO requests (date_requested, listing_id, requester_id, confirmed) VALUE
 INSERT INTO requests (date_requested, listing_id, requester_id, confirmed) VALUES ('2023-10-24', 2, 1, Null);
 INSERT INTO requests (date_requested, listing_id, requester_id, confirmed) VALUES ('2023-10-24', 3, 2, Null);
 INSERT INTO requests (date_requested, listing_id, requester_id, confirmed) VALUES ('2023-10-24', 4, 1, Null);
+
+--We are confirming one request -- Confirming request #1 where user #3 requested listing #1 owned by user #1
+UPDATE requests SET confirmed = TRUE WHERE id = 1;
+UPDATE dates_listings SET request_id = 1 WHERE listing_id = 1;
