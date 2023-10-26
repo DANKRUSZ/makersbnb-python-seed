@@ -95,14 +95,52 @@ def signout():
 # ======== AUTHENTICATION-ONLY ROUTES =================== #
 
 # All spaces '/spaces' ['GET']
-@app.route('/spaces')
-def all_spaces_page():
-    # User in session
-    if session.get('user_id') is not None:
-        return render_template('spaces/all_spaces.html')
-    else:
-        return redirect('/login')
+# @app.route('/spaces')
+# def all_spaces_page():
+#     # User in session
+#     if session.get('user_id') is not None:
+#         return render_template('spaces/all_spaces.html')
+#     else:
+#         return redirect('/login')
     
+
+#TODO - the issue seems to be that the dates are not being successfully sumbitted to the SQL query. :-(
+# All spaces '/spaces' ['GET'] PREVIOUS
+@app.route('/spaces', methods=['GET','POST'])
+def all_spaces_page():
+    connection = get_flask_database_connection(app)
+    listing_repository = ListingRepository(connection)
+    # # User in session
+    # if session.get('user_id') is not None:
+    spaces = listing_repository.all()
+    if request.method == 'POST':
+        date_from = request.form['date_from']
+        print(date_from)
+        date_to = request.form['date_to']
+        print(date_from)
+        # date_from = datetime.strptime(date_from_str, '%Y-%m-%d').date()
+        # date_to = datetime.strptime(date_to_str, '%Y-%m-%d').date()
+        avail_spaces = listing_repository.get_available_spaces(date_from, date_to)
+        return render_template('/spaces/filtered_spaces.html', spaces=avail_spaces)
+    else:
+        return render_template('/spaces/all_spaces.html', spaces=spaces)
+#     else:
+#         return redirect('/login')   
+
+
+# def all_spaces_page():
+#     connection = get_flask_database_connection(app)
+#     listing_repository = ListingRepository(connection)
+#     # # User in session
+#     # if session.get('user_id') is not None:
+#     spaces = listing_repository.all()
+#     if request.method == 'POST':
+#         return render_template('/spaces/filtered_spaces.html', spaces=spaces)
+#     else:
+#         return render_template('/spaces/all_spaces.html', spaces=spaces)
+    
+
+
 
 # List a space '/spaces/new' ['GET']
 @app.route('/spaces/new')

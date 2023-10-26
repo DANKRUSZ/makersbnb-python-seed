@@ -11,7 +11,7 @@
     <!-- HEADER WITH AUTH -- copy to every page once this image is figured out -->
     <div class="header">
         <!-- TODO: This image doesn't work -->
-        <img src="/makersbnb-python-seed/static/makers_logo.png" alt="Makers Logo">
+        <img src="/makersbnb_routes_ticket/static/makers_logo_test.png" alt="Makers Logo">
         <a class="spaces_link" href="/spaces">Spaces</a>
         <a class="requests_link" href="/requests">Requests</a>
         <a class="sign_out_link" href="/signout">Sign out</a>
@@ -35,9 +35,9 @@
     <form action="/spaces" method="post">
         <p>
         <label for="DateFrom">Available From:</label>
-        <input type="date" name="date_from" id="datefrom">
+        <input type="date" name="date_from" id="date_from">
         <label for="DateTo">Available To:</label>
-        <input type="date" name="date_to" id="dateto">
+        <input type="date" name="date_to" id="date_to">
         <!-- <label for="listspacesavailable">List Spaces Available</label> -->
         <input type="submit" value="List Spaces">
         </p>
@@ -49,6 +49,7 @@
         - POST filters spaces to dates selected        
         - each space in the list takes you to a new confirmation page  -->
 
+        <!-- TODO filtering of relevant spaces-->
     {% for space in spaces %}
     <article>
         <h2 class="t-title">{{space.title}}</h2>
