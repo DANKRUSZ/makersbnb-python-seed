@@ -10,8 +10,8 @@ def test_request_initiation():
     assert request.confirmed == None
 
 def test_eql():
-    request1 = Request(1, date(2023, 10, 24), 2, 2, None)
-    request2 = Request(1, date(2023, 10, 24), 2, 2, None)
+    request1 = Request(1, date(2023, 10, 24), 2, 2, True)
+    request2 = Request(1, date(2023, 10, 24), 2, 2, True)
     assert request1 == request2
 
 def test_formats_nicely():

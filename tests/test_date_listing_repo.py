@@ -11,7 +11,7 @@ def test_all(db_connection):
     repository = DateListingRepo(db_connection)
 
     assert repository.all() == [
-        DateListing(1, date(2023,10,24), 1, None),
+        DateListing(1, date(2023,10,24), 1, 1),
         DateListing(2, date(2023,10,24), 2, None),
         DateListing(3, date(2023,10,24), 3, None),
         DateListing(4, date(2023,10,24), 4, None)
@@ -29,7 +29,7 @@ def test_find_by_listing_id(db_connection):
     db_connection.seed("seeds/makers_bnb.sql")
     repository = DateListingRepo(db_connection)
 
-    assert repository.find_by_listing_id(1) == [DateListing(1, date(2023,10,24), 1, None)]
+    assert repository.find_by_listing_id(2) == [DateListing(2, date(2023,10,24), 2, None)]
     assert repository.find_by_listing_id(4) == [DateListing(4, date(2023,10,24), 4, None)]
 
 # ======= CREATE ======= #
@@ -39,7 +39,7 @@ def test_create(db_connection):
 
     assert repository.create(date(2023,10,23), 4, 3) == 5
     assert repository.all() == [
-        DateListing(1, date(2023,10,24), 1, None),
+        DateListing(1, date(2023,10,24), 1, 1),
         DateListing(2, date(2023,10,24), 2, None),
         DateListing(3, date(2023,10,24), 3, None),
         DateListing(4, date(2023,10,24), 4, None),
@@ -47,7 +47,7 @@ def test_create(db_connection):
         ]
     assert repository.create(date(2023,10,23), 4, None) == 6
     assert repository.all() == [
-        DateListing(1, date(2023,10,24), 1, None),
+        DateListing(1, date(2023,10,24), 1, 1),
         DateListing(2, date(2023,10,24), 2, None),
         DateListing(3, date(2023,10,24), 3, None),
         DateListing(4, date(2023,10,24), 4, None),
