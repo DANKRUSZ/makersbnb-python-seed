@@ -1,15 +1,11 @@
 import os
 from flask import Flask, request, render_template, session, redirect, url_for
 from lib.database_connection import get_flask_database_connection
-<<<<<<< HEAD
-from lib.user_repository import UserRepository, User
-from lib.request_repository import RequestRepository
-=======
 from lib.user_repository import UserRepository
 from lib.listing_repository import ListingRepository
 from lib.date_listing_repo import DateListingRepo
+from lib.request_repository import RequestRepository
 from datetime import datetime, timedelta
->>>>>>> origin/main
 
 # Create a new Flask app
 app = Flask(__name__)
