@@ -6,7 +6,7 @@ def test_DateListing_initiation():
     assert datelisting.id == 1
     assert datelisting.date_available == date(2023, 10, 24)
     assert datelisting.listing_id == 2
-    assert datelisting.requester_id == 2
+    assert datelisting.request_id == 2
 
 def test_eql():
     datelisting1 = DateListing (1, date(2023, 10, 24), 2, 2)

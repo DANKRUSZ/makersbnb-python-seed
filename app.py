@@ -1,8 +1,15 @@
 import os
 from flask import Flask, request, render_template, session, redirect, url_for
 from lib.database_connection import get_flask_database_connection
+<<<<<<< HEAD
 from lib.user_repository import UserRepository, User
 from lib.request_repository import RequestRepository
+=======
+from lib.user_repository import UserRepository
+from lib.listing_repository import ListingRepository
+from lib.date_listing_repo import DateListingRepo
+from datetime import datetime, timedelta
+>>>>>>> origin/main
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -32,7 +39,8 @@ def homepage():
 def signup_post(): #aka create new user
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
-
+    
+    #CAPTURING FORM SUBMISSION FIELDS:
     email = request.form['email']
     password1 = request.form['password1']
     password2 = request.form['password2']
@@ -59,6 +67,7 @@ def login_post():
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
 
+    #CAPTURING FORM SUBMISSION FIELDS:
     email = request.form['email']
     password = request.form['password']
     
@@ -95,14 +104,82 @@ def signout():
 def all_spaces_page():
     # User in session
     if session.get('user_id') is not None:
-        return render_template('/spaces/all_spaces.html')
+        return render_template('spaces/all_spaces.html')
     else:
         return redirect('/login')
     
 
-
 # List a space '/spaces/new' ['GET']
-## List a space_post '/spaces/new' ['POST']
+@app.route('/spaces/new')
+def list_a_space_page():
+    # User in session
+    if session.get('user_id') is not None:
+        return render_template('spaces/list_a_space.html')
+    else:
+        return redirect('/login')
+
+
+# List a space_post '/spaces/new' ['POST']
+@app.route('/spaces/new', methods=['POST'])
+def list_a_space_post():
+    #aka create new listing
+    connection = get_flask_database_connection(app)
+    listing_repository = ListingRepository(connection)
+    availability_repository = DateListingRepo(connection)
+
+    #CAPTURING FORM SUBMISSION FIELDS:
+    #listing
+    title = request.form['name'] #cannot be blank
+    title = title.title() #convert to title case
+    description = request.form['description'] #cannot be blank
+    price_string = request.form['price'] #must be numeric -- integer, not float or non-number
+
+    #availability
+    available_from_string = request.form['available_from'] #cannot be blank, must be on or after today
+    available_to_string = request.form['available_to'] #cannot be blank, must be on or after available_from
+
+    #owner_id
+    owner_id = session.get('user_id')
+
+    # check for errors:
+    # Errors listed above in fields.
+    if listing_repository.check_for_errors(title, description, price_string) and availability_repository.check_for_errors_new_listing(available_from_string, available_to_string):
+        return render_template(
+            'spaces/list_a_space.html', 
+            listing_errors=listing_repository.generate_errors(title, description, price_string), 
+            availability_errors=availability_repository.generate_errors_new_listing(available_from_string, available_to_string)
+            ), 400
+    elif listing_repository.check_for_errors(title, description, price_string):
+        return render_template(
+            'spaces/list_a_space.html', 
+            listing_errors=listing_repository.generate_errors(title, description, price_string)
+            ), 400
+    elif availability_repository.check_for_errors_new_listing(available_from_string, available_to_string):
+        return render_template(
+            'spaces/list_a_space.html', 
+            availability_errors=availability_repository.generate_errors_new_listing(available_from_string, available_to_string)
+            ), 400
+
+    #convert strings to datetime objects
+    available_from = datetime.strptime(available_from_string, '%Y-%m-%d') #error handling for blanks and invalid date is handled above
+    available_to = datetime.strptime(available_to_string, '%Y-%m-%d') #error handling for blanks and invalid date is handled above
+    #convert price to integer
+    price = round(price_string) #error handling for float or non-numeric is handled above.
+
+
+    #listing
+    listing_id = listing_repository.create(title=title, description=description, price=price, owner_id=owner_id)
+    print(f"Space successfully listed: #{listing_id}") #print to check if #create worked
+
+    #availability -- make a new available date for the new listing for each date in the date range, inclusive
+    new_availability_date = available_from
+    while new_availability_date <= available_to:
+        new_availability_id = availability_repository.create(date_available=new_availability_date, listing_id=listing_id, requester_id=None)
+        print(f"New availability date for listing {listing_id}, id: {new_availability_id}, date:{new_availability_date}")
+        new_availability_date += timedelta(days=1)
+    
+    # return redirect(f'/spaces/{listing_id}') #redirect to the new listing's page
+    return redirect('/spaces')
 
 
 # Single space page '/spaces/<id>' ['GET']
@@ -134,4 +211,4 @@ def get_index():
 # They also start the server configured to use the test database
 # if started in test mode.
 if __name__ == '__main__':
-    app.run(debug=True, port=int(os.environ.get('PORT', 5001)))
+    app.run(debug=True, port=int(os.environ.get('PORT', 5000)))

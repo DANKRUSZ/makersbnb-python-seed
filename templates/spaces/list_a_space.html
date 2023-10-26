@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List a Space | Makersbnb</title>
+    <!-- LINK CSS STYLESHEET FOR LATER -->
+    <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+    <!-- HEADER -- copy to every page once this image is figured out -->
+    <div class="header">
+        <!-- TODO: This image doesn't work -->
+        <img src="/makersbnb-python-seed/static/makers_logo.png" alt="Makers Logo">
+        <a class="spaces_link" href="/spaces">Spaces</a>
+        <a class="requests_link" href="/requests">Requests</a>
+        <a class="sign_out_link" href="/signout">Sign out</a>
+    </div>
+    <!-- HEADER -->
+
+    <!-- List a Space Copy -->
+    <div class="list_a_space_copy">
+        <h1 class="list_a_space_copy_slogan">List a Space</h1>
+        <p class="list_a_space_copy_text">
+            With Makersbnb, any space can be a little extra pocket money.<br>
+            Whether you have a spare room, a flat, a house, or even a boat, share your space with Makersbnb.<br>
+        </p>
+    </div>
+    <!-- List a Space Copy -->
+
+    <br>
+    <br>
+
+    <!-- List a Space Form -->
+    <div class="list_a_space_form">
+        <form class="list_a_space_form_fields" action="/spaces/new" method="post">
+
+        <!-- We check to see if there are any errors from a previous submission -->
+        {% if listing_errors %}
+            <!-- If so, we show them. -->
+            <p class="t-errors">
+                There were errors with your listing details: <br>{{ listing_errors }}
+            </p>
+        {% endif %}
+
+        {% if availability_errors %}
+        <!-- If so, we show them. -->
+        <p class="t-errors">
+            There were errors with your available dates: <br>{{ availability_errors }}
+        </p>
+        {% endif %}
+
+
+        <!-- FORM FIELDS -->
+        <p>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name">
+        </p>
+        <p>
+            <label for="description">Description</label>
+            <input type="text" name="description" id="description">
+        </p>
+        <p>
+            <label for="price">Price per Night (£)</label>
+            <input type="number" name="price" id="price" min="10" max="1000">
+        </p>
+        <p>
+            <label for="available_from">Available from</label>
+            <input type="date" name="available_from" id="available_from" min="2023-10-26" max="2024-10-26" >
+        </p>
+
+        <p>
+            <label for="available_to">Available to</label>
+            <input type="date" name="available_to" id="available_to" min="2023-10-26" max="2024-10-26" >
+        </p>
+
+        <!-- SUBMIT BUTTON -->
+        <p>
+            <input type="submit" value="List my Space">
+        </p>
+
+        </form>
+    </div>
+    <!-- List a Space Form -->
+
+
+    
+    
+
+    
+</body>
+</html>
