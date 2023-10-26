@@ -1,5 +1,4 @@
 from lib.request import Request
-
 class RequestRepository:
     def __init__(self, connection):
         self._connection = connection
@@ -82,3 +81,41 @@ class RequestRepository:
 
         self._connection.execute(query, params)
         return None
+    
+
+    # ===== CHECK REQUESTS RECEIVED =====
+    def requests_received(self, owner_id):
+        query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title FROM requests JOIN listings ON requests.listing_id = listings.id WHERE listings.owner_id = %s'
+        params = [owner_id]
+
+        rows = self._connection.execute(query, params)
+        result = []
+        for row in rows:
+            request = {'id': row['id'],
+                    'date_requested': row['date_requested'],
+                    'listing_id': row['listing_id'],
+                    'requester_id': row['requester_id'],
+                    'confirmed': row['confirmed'],
+                    'title': row['title']
+                    }
+            result.append(request)
+        return result
+
+    # ===== CHECK REQUESTS I HAVE MADE =====
+    def requests_made(self, requester_id):
+        query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title FROM requests JOIN listings ON requests.listing_id = listings.id WHERE requests.requester_id = %s'
+        params = [requester_id]
+
+        rows = self._connection.execute(query, params)
+        result = []
+        for row in rows:
+            request = {'id': row['id'],
+                    'date_requested': row['date_requested'],
+                    'listing_id': row['listing_id'],
+                    'requester_id': row['requester_id'],
+                    'confirmed': row['confirmed'],
+                    'title': row['title']
+                    }
+            result.append(request)
+        return result
+
