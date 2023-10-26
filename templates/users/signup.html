@@ -3,23 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Makersbnb</title>
-    <!-- LINK CSS STYLESHEET FOR LATER -->
-    <link rel="stylesheet" href="/style.css" />
+    <title>Sign up | Makersbnb</title>
+<!-------------------------- START COPYING TO EVERY PAGE -------------------------------->
+
+    <!-- IN-DOC STYLESHEET: -->
+    <style>
+        body {
+            font-size: 18px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 20px 30px; /* Add margin top/bottom, right/left */
+        }
+        /* LINK COLOUR */
+        a:link {
+            color: black; /* Change this to your desired color */
+        }
+        a:visited {
+            color: black; /* Change this to your desired color */
+        }
+        /* Increase the size of date input fields */
+        input[type="text"] {
+            width: 60%;
+            height: 25px; /* Adjust the height to your preference */
+        }
+        input[type="password"] {
+            width: 60%;
+            height: 25px; /* Adjust the height to your preference */
+        }
+        .sign_up_button {
+        background-color: transparent; /* Remove the background color */
+        border: 2px solid #000;
+        padding: 4px 15px;
+        box-shadow: 5px 5px 0px #000;
+        font-family: 'Comic Sans MS', cursive, sans-serif; /* Set the font */
+        font-size: 18px;
+        margin-right: 5px;
+        margin-bottom: 10px
+    }
+    </style>
+
 </head>
+
 <body>
-    <!-- HEADER -- copy to every page once this image is figured out -->
+<!-- HEADER NO AUTH -- copy to every page once this image is figured out -->
     <div class="header">
-        <!-- TODO: This image doesn't work -->
-        <img src="/makersbnb-python-seed/static/makers_logo.png" alt="Makers Logo">
-        <a class="about_link" href="/about">About</a>
-        <a class="login_link" href="/login">Login</a>
-    </div>
-    <!-- HEADER -->
+        <!-- LINKABLE LOGO -->
+        <a href="/" style="text-decoration: none;">
+            <div class="logo-container" style="float: left; background-color: black; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center;">
+                <span style="color: white; font-family: 'Comic Sans MS', cursive, sans-serif; font-size: 40px;">M</span>
+            </div>
+        </a>
+        <!-- HEADER LINKS -->
+        <div class="header_links" style="text-align: right;">
+            <a class="about_link" href="/about">About</a> |
+            <a class="login_link" href="/login">Login</a>
+    </div>  
+
+<!-- HEADER NO AUTH -- copy to every page once this image is figured out -->
+<!-------------------------- STOP COPYING TO EVERY PAGE -------------------------------->
+<br>
+<br>
+
 
     <!-- AIRBNB COPY -->
-    <div class="airbnb_copy">
+    <div class="airbnb_copy" style="text-align: center;">
         <h1 class="airbnb_copy_slogan">Feel at home, anywhere!</h1>
+        <br>
         <p class="airbnb_copy_text">
             Feel at home wherever you travel with Makersbnb.<br>
             Makersbnb opens the door to interesting homes and experiences.<br>
@@ -28,44 +76,54 @@
     <!-- AIRBNB COPY -->
 
     <br>
-    <br>
 
     <!-- SIGN UP FORM -->
-    <div class="sign_up_form">
-        <h2 class="sign_up_form_header">Sign up to Makersbnb</h2>
+    <h2 class="sign_up_form_header" style="text-align: center;">Sign up to Makersbnb</h2>
+
+   <!-- SIGN UP FORM BOX -->
+    <div class="sign_up_form" style="border: 2px solid #000; padding: 30px; margin-left: 280px; margin-right: 280px; text-align: center;">
         <form class="sign_up_form_fields" action="/" method="post">
 
-        <!-- We check to see if there are any errors from a previous submission -->
-        {% if errors %}
-            <!-- If so, we show them. -->
-            <p class="t-errors">
-                There were errors with your submission: <br>{{ errors }}
-            </p>
-        {% endif %}
+            <!-- We check to see if there are any errors from a previous submission -->
+            {% if errors %}
+                <!-- If so, we show them. -->
+                <p class="t-errors">
+                    There were errors with your submission:<br>{{ errors }}
+                </p>
+            {% endif %}
 
-        <!-- FORM FIELDS -->
-        <p>
-            <label for="email">Email</label>
-            <input type="text" name="email" id="email">
-        </p>
-        <p>
-            <label for="password1">Password</label>
-            <input type="password" name="password1" id="password1">
-        </p>
-        <p>
-            <label for="password2">Confirm Password</label>
-            <input type="password" name="password2" id="password2">
-        </p>
+            <!-- FORM FIELDS -->
+            <div style="text-align: left; margin: 0 auto; width: 80%;">
+                <p style="margin-left: 100px;">
+                    <label for="email">Email Address</label>
+                </p>
+                <p style="margin-left: 100px;">
+                    <input type="text" name="email" id="email">
+                </p>
+                <p style="margin-left: 100px;">
+                    <label for="password1">Password</label>
+                </p>
+                <p style="margin-left: 100px;">
+                    <input type="password" name="password1" id="password1">
+                </p>
+                <p style="margin-left: 100px;">
+                    <label for="password2">Confirm Password</label>
+                </p>
+                <p style="margin-left: 100px;">
+                    <input type="password" name="password2" id="password2">
+                </p>
+            </div>
 
-        <!-- SUBMIT BUTTON -->
-        <p>
-            <input type="submit" value="Sign up">
-        </p>
+
+            <!-- SUBMIT BUTTON -->
+            <button type="submit" class="sign_up_button" style="text-align: center;">
+                Sign Up
+            </button>
 
 
         </form>
     </div>
-    <!-- SIGN UP FORM -->
+    <!-- SIGN UP FORM BOX -->
 
 
     
