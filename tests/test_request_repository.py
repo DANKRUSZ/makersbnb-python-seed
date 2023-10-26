@@ -88,3 +88,47 @@ def test_deny_request(db_connection):
         Request(3, date(2023,10,24), 3, 2, None),
         Request(4, date(2023,10,24), 4, 1, None)
     ]
+
+
+
+    # ===== CHECK REQUESTS I RECEVIED =====
+
+def test_requests_received(db_connection):
+    db_connection.seed("seeds/makers_bnb.sql")
+    repository = RequestRepository(db_connection)
+
+    assert repository.requests_received(1) == [{
+        'id': 1,
+        'date_requested': date(2023, 10, 24),
+        'listing_id': 1,
+        'requester_id': 3,
+        'confirmed': None,
+        'title': 'House 1'
+    }]
+
+
+    # ===== CHECK REQUESTS I MADE =====
+
+def test_requests_made(db_connection):
+    db_connection.seed("seeds/makers_bnb.sql")
+    repository = RequestRepository(db_connection)
+
+    assert repository.requests_made(1) == [{
+        'id': 2,
+        'date_requested': date(2023, 10, 24),
+        'listing_id': 2,
+        'requester_id': 1,
+        'confirmed': None,
+        'title': 'House 2'
+    },
+    {
+        'id': 4,
+        'date_requested': date(2023, 10, 24),
+        'listing_id': 4,
+        'requester_id': 1,
+        'confirmed': None,
+        'title': 'House 4'   
+    }]
+
+
+

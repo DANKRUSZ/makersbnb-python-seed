@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Requests Page</title>
+
+        <!--
+            Head to https://github.com/makersacademy/web-applications-in-python/blob/main/pills/loading_css_or_static_files.md
+            If you're wondering how the CSS file below is being loaded.
+        -->
+        <link rel="stylesheet" href="/static/style.css" >
+    </head>
+    <body>
+
+
+        <!-- HEADER WITH AUTH -- copy to every page once this image is figured out -->
+    <div class="header">
+        <!-- TODO: This image doesn't work -->
+        <img src="/makersbnb_routes_ticket/static/makers_logo_test.png" alt="Makers Logo">
+        <a class="spaces_link" href="/spaces">Spaces</a>
+        <a class="requests_link" href="/requests">Requests</a>
+        <a class="sign_out_link" href="/signout">Sign out</a>
+    </div>
+
+    <div class="airbnb_copy">
+        <h1 class="airbnb_copy_slogan">Requests</h1>
+    
+    </div>
+        <h2>Requests I've Made</h2>
+        {% for request in requests_made%}
+        <div>
+            Space: {{request.title}} <br>
+            Confirmation: {{request.confirmed}}<br>
+            Date: {{request.date_requested}}<br>
+            <br>
+        </div>
+        {% endfor %}
+
+        <h3>Requests I've Received</h3>
+        {% for request in requests_received%}
+        <div>
+            Space: {{request.title}} <br>
+            Confirmation: {{request.confirmed}}<br>
+            Date: {{request.date_requested}}<br>
+            <br>
+        </div>
+        {% endfor %}
+    </body>
+</html>
