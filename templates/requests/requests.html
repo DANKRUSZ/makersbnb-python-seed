@@ -30,8 +30,8 @@
         <h2>Requests I've Made</h2>
         {% for request in requests%}
         <div>
-            Listing:  <br>
-            Confirmed: <br>
+            Listing: {{request.title}} <br>
+            Confirmed: {{request.confirmed}}<br>
             Date: {{request.date_requested}} 
         </div>
         {% endfor %}
