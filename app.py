@@ -1,8 +1,10 @@
 import os
 from flask import Flask, request, render_template, session, redirect, url_for
 from lib.database_connection import get_flask_database_connection
-from lib.user_repository import UserRepository, User
-
+from lib.user_repository import UserRepository
+from lib.listing_repository import ListingRepository
+from lib.date_listing_repo import DateListingRepo
+from datetime import datetime, timedelta
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -95,14 +97,66 @@ def signout():
 def all_spaces_page():
     # User in session
     if session.get('user_id') is not None:
-        return render_template('/spaces/all_spaces.html')
+        return render_template('spaces/all_spaces.html')
     else:
         return redirect('/login')
     
 
-
 # List a space '/spaces/new' ['GET']
-## List a space_post '/spaces/new' ['POST']
+@app.route('/spaces/new')
+def list_a_space_page():
+    # User in session
+    if session.get('user_id') is not None:
+        return render_template('spaces/list_a_space.html')
+    else:
+        return redirect('/login')
+
+
+# List a space_post '/spaces/new' ['POST']
+@app.route('/spaces/new', methods=['POST'])
+def list_a_space_post():
+    #aka create new listing
+    connection = get_flask_database_connection(app)
+    listing_repository = ListingRepository(connection)
+    availability_repository = DateListingRepo(connection)
+
+    #listing
+    title = request.form['name']
+    description = request.form['description']
+    price_string = request.form['price']
+
+    #availability
+    available_from_string = request.form['available_from']#check type
+    available_to_string = request.form['available_to']
+
+    #owner_id
+    owner_id = session.get('user_id')
+    available_from = datetime.strptime(available_from_string, '%Y-%m-%d')  # Convert to datetime object
+    available_to = datetime.strptime(available_to_string, '%Y-%m-%d')  # Convert to datetime object
+
+#     # check for errors - listing: -- change to listing_errors, availability_errors, if both, then if one, and the other
+#     if listing_repository.check_for_errors(title, description, price):
+#         return render_template('spaces/list_a_space.html', errors=listing_repository.generate_errors(title, description, price)), 400
+#     # check for errors - availability:    
+#     if availability_repository.check_for_errors(available_from, available_to):
+#         return render_template('spaces/list_a_space.html', errors=availability_repository.generate_errors(title, description, price)), 400
+
+    price_float = float(price_string) #error handling if is not numeric above
+    price = round(price_float) #convert a possible float into an integer    
+
+    #listing
+    listing_id = listing_repository.create(title=title, description=description, price=price, owner_id=owner_id)
+    print(f"Space successfully listed: #{listing_id}") #print to check if #create worked
+
+    #availability -- make a new available date for the new listing for each date in the date range, inclusive
+    new_availability_date = available_from
+    while new_availability_date <= available_to:
+        new_availability_id = availability_repository.create(date_available=new_availability_date, listing_id=listing_id, requester_id=None)
+        print(f"New availability date for listing {listing_id}, id: {new_availability_id}, date:{new_availability_date}")
+        new_availability_date += timedelta(days=1)
+    
+    # return redirect(f'/spaces/{listing_id}') #redirect to the new listing's page
+    return redirect('/spaces')
 
 
 # Single space page '/spaces/<id>' ['GET']
@@ -131,4 +185,4 @@ def get_index():
 # They also start the server configured to use the test database
 # if started in test mode.
 if __name__ == '__main__':
-    app.run(debug=True, port=int(os.environ.get('PORT', 5001)))
+    app.run(debug=True, port=int(os.environ.get('PORT', 5000)))
