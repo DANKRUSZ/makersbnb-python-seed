@@ -66,3 +66,21 @@ def test_delete_Listing(db_connection):
         Listing(3, 'House 3', 'Big house', 200.00, 3),
         Listing(4, 'House 4', 'Massive house', 500.00, 4)
     ]
+
+# ======== ERROR HANDLING FOR FORM FIELDS ======== #
+def test_check_for_errors(db_connection):
+    db_connection.seed("seeds/makers_bnb.sql")
+    repository = ListingRepository(db_connection)
+
+    assert repository.check_for_errors(title="", description="", price_string="") == True
+    assert repository.check_for_errors(title="", description="some description", price_string="abc") == True
+    assert repository.check_for_errors(title="", description="some description", price_string="1.5") == True
+    assert repository.check_for_errors(title="Valid", description="Valid description", price_string="100") == False
+
+def test_generate_errors(db_connection):
+    db_connection.seed("seeds/makers_bnb.sql")
+    repository = ListingRepository(db_connection)
+
+    assert repository.generate_errors(title="", description="", price_string="") == "Name cannot be empty, Description cannot be empty, Price cannot be empty"
+    assert repository.generate_errors(title="", description="some description", price_string="abc") == "Name cannot be empty, Price must be a whole number"
+    assert repository.generate_errors(title="", description="some description", price_string="1.5") == "Name cannot be empty, Price must be a whole number"

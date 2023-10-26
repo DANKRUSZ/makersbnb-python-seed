@@ -34,7 +34,8 @@ def homepage():
 def signup_post(): #aka create new user
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
-
+    
+    #CAPTURING FORM SUBMISSION FIELDS:
     email = request.form['email']
     password1 = request.form['password1']
     password2 = request.form['password2']
@@ -61,6 +62,7 @@ def login_post():
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
 
+    #CAPTURING FORM SUBMISSION FIELDS:
     email = request.form['email']
     password = request.form['password']
     
@@ -120,29 +122,44 @@ def list_a_space_post():
     listing_repository = ListingRepository(connection)
     availability_repository = DateListingRepo(connection)
 
+    #CAPTURING FORM SUBMISSION FIELDS:
     #listing
-    title = request.form['name']
-    description = request.form['description']
-    price_string = request.form['price']
+    title = request.form['name'] #cannot be blank
+    title = title.title() #convert to title case
+    description = request.form['description'] #cannot be blank
+    price_string = request.form['price'] #must be numeric -- integer, not float or non-number
 
     #availability
-    available_from_string = request.form['available_from']#check type
-    available_to_string = request.form['available_to']
+    available_from_string = request.form['available_from']
+    available_to_string = request.form['available_to'] 
+    #convert to datetime objects
+    available_from = datetime.strptime(available_from_string, '%Y-%m-%d') #must be on or after today
+    available_to = datetime.strptime(available_to_string, '%Y-%m-%d') #must be on or after available_from
 
     #owner_id
     owner_id = session.get('user_id')
-    available_from = datetime.strptime(available_from_string, '%Y-%m-%d')  # Convert to datetime object
-    available_to = datetime.strptime(available_to_string, '%Y-%m-%d')  # Convert to datetime object
 
-#     # check for errors - listing: -- change to listing_errors, availability_errors, if both, then if one, and the other
-#     if listing_repository.check_for_errors(title, description, price):
-#         return render_template('spaces/list_a_space.html', errors=listing_repository.generate_errors(title, description, price)), 400
-#     # check for errors - availability:    
-#     if availability_repository.check_for_errors(available_from, available_to):
-#         return render_template('spaces/list_a_space.html', errors=availability_repository.generate_errors(title, description, price)), 400
+    # check for errors:
+    # Errors listed above in fields.
+    if listing_repository.check_for_errors(title, description, price_string) and availability_repository.check_for_errors(available_from, available_to):
+        return render_template(
+            'spaces/list_a_space.html', 
+            listing_errors=listing_repository.generate_errors(title, description, price_string), 
+            availability_errors=availability_repository.generate_errors(available_from, available_to)
+            ), 400
+    elif listing_repository.check_for_errors(title, description, price_string):
+        return render_template(
+            'spaces/list_a_space.html', 
+            listing_errors=listing_repository.generate_errors(title, description, price_string)
+            ), 400
+    elif availability_repository.check_for_errors(available_from, available_to):
+        return render_template(
+            'spaces/list_a_space.html', 
+            availability_errors=availability_repository.generate_errors(available_from, available_to)
+            ), 400
 
-    price_float = float(price_string) #error handling if is not numeric above
-    price = round(price_float) #convert a possible float into an integer    
+    price = round(price_string) #error handling for float or non-numeric is handled above.
+
 
     #listing
     listing_id = listing_repository.create(title=title, description=description, price=price, owner_id=owner_id)
