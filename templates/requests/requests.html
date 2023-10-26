@@ -30,18 +30,20 @@
         <h2>Requests I've Made</h2>
         {% for request in requests_made%}
         <div>
-            Listing: {{request.title}} <br>
-            Confirmed: {{request.confirmed}}<br>
-            Date: {{request.date_requested}} 
+            Space: {{request.title}} <br>
+            Confirmation: {{request.confirmed}}<br>
+            Date: {{request.date_requested}}<br>
+            <br>
         </div>
         {% endfor %}
 
         <h3>Requests I've Received</h3>
         {% for request in requests_received%}
         <div>
-            Listing: {{request.title}} <br>
-            Confirmed: {{request.confirmed}}<br>
-            Date: {{request.date_requested}} 
+            Space: {{request.title}} <br>
+            Confirmation: {{request.confirmed}}<br>
+            Date: {{request.date_requested}}<br>
+            <br>
         </div>
         {% endfor %}
     </body>
