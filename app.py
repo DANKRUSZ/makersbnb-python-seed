@@ -111,7 +111,9 @@ def all_spaces_page():
 
 # All requests for the session user '/requests' ['GET']
 ## Requests I've made, Requests I've recieved
-
+@app.route('/requests', methods=['GET'])
+def get_requests():
+    return render_template('requests/requests.html')
 
 # Single request page '/requests/<id>' ['GET']
 ## Confirm request '/requests/<id>/confirm' ['POST']
