@@ -43,9 +43,9 @@ CREATE TABLE dates_listings (
     id SERIAL PRIMARY KEY,
     date_available DATE,
     listing_id int,
-    requester_id int,
+    request_id int,
     FOREIGN KEY (listing_id) REFERENCES listings(id) ON DELETE CASCADE,
-    FOREIGN KEY (requester_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (request_id) REFERENCES requests(id) ON DELETE CASCADE
     );
 
 --We are creating three users
@@ -61,14 +61,13 @@ INSERT INTO listings (title, description, price, owner_id) VALUES ('House 3', 'B
 INSERT INTO listings (title, description, price, owner_id) VALUES ('House 4', 'Massive house', 500.00, 4);
 
 --We are adding three listings with the dates available
-INSERT INTO dates_listings (date_available, listing_id, requester_id) VALUES ('2023-10-24', 1, 3);
-INSERT INTO dates_listings (date_available, listing_id, requester_id) VALUES ('2023-10-24', 2, 1);
-INSERT INTO dates_listings (date_available, listing_id, requester_id) VALUES ('2023-10-24', 3, 2);
-INSERT INTO dates_listings (date_available, listing_id, requester_id) VALUES ('2023-10-24', 4, 1);
+INSERT INTO dates_listings (date_available, listing_id, request_id) VALUES ('2023-10-24', 1, Null);
+INSERT INTO dates_listings (date_available, listing_id, request_id) VALUES ('2023-10-24', 2, Null);
+INSERT INTO dates_listings (date_available, listing_id, request_id) VALUES ('2023-10-24', 3, Null);
+INSERT INTO dates_listings (date_available, listing_id, request_id) VALUES ('2023-10-24', 4, Null);
 
 --We are adding three requests for the listings that are available
 INSERT INTO requests (date_requested, listing_id, requester_id, confirmed) VALUES ('2023-10-24', 1, 3, Null);
 INSERT INTO requests (date_requested, listing_id, requester_id, confirmed) VALUES ('2023-10-24', 2, 1, Null);
 INSERT INTO requests (date_requested, listing_id, requester_id, confirmed) VALUES ('2023-10-24', 3, 2, Null);
 INSERT INTO requests (date_requested, listing_id, requester_id, confirmed) VALUES ('2023-10-24', 4, 1, Null);
-
