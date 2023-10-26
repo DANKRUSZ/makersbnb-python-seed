@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, render_template, session, redirect, url_for
 from lib.database_connection import get_flask_database_connection
 from lib.user_repository import UserRepository, User
-
+from lib.listing_repository import ListingRepository
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -90,15 +90,29 @@ def signout():
 
 # ======== AUTHENTICATION-ONLY ROUTES =================== #
 
+# # All spaces '/spaces' ['GET']
+# @app.route('/spaces')
+# def all_spaces_page():
+#     # User in session
+#     if session.get('user_id') is not None:
+#         return render_template('/spaces/all_spaces.html')
+#     else:
+#         return redirect('/login')
+    
 # All spaces '/spaces' ['GET']
 @app.route('/spaces')
 def all_spaces_page():
-    # User in session
-    if session.get('user_id') is not None:
-        return render_template('/spaces/all_spaces.html')
-    else:
-        return redirect('/login')
+    connection = get_flask_database_connection(app)
+    listing_repository = ListingRepository(connection)
+    # # User in session
+    # if session.get('user_id') is not None:
+    spaces = listing_repository.all()
+    return render_template('/spaces/all_spaces.html', spaces=spaces)
+    # else:
+    #     return redirect('/login')
     
+
+
 
 
 # List a space '/spaces/new' ['GET']

@@ -22,10 +22,39 @@
     <!-- BOOK A SPACE -->
     <div class="airbnb_copy">
         <h1 class="airbnb_copy_slogan">Book a Space</h1>
-    
+
     </div>
     <!-- BOOK A SPACE -->
 
+    <!-- List A Space button - centrally centred -->
+    <div><a class="list_space_link" href="/spaces/new">List A Space</a></div>
+
+
+    <!-- Available From form (limit input to dates?) +  Available To form (limit input to dates?)  +   List Spaces button (POST) -->
+
+    <form action="/spaces" method="post">
+        <p>
+        <label for="DateFrom">Available From:</label>
+        <input type="date" name="datefrom" id="datefrom">
+        <label for="DateTo">Available To:</label>
+        <input type="date" name="dateto" id="dateto">
+        <!-- <label for="listspacesavailable">List Spaces Available</label> -->
+        <input type="submit" value="List Spaces">
+        </p>
+    </form>
+
+
+    <!-- For loop of spaces available in those dates
+        - begins will all spaces
+        - POST filters spaces to dates selected        
+        - each space in the list takes you to a new confirmation page  -->
+
+    {% for space in spaces %}
+    <article>
+        <h2 class="t-title">{{space.title}}</h2>
+        <p class="t-content">{{space.description}}</p>
+    </article>
+    {% endfor %}
 
 </body>
 </html>
