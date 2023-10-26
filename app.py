@@ -3,6 +3,7 @@ from flask import Flask, request, render_template, session, redirect, url_for
 from lib.database_connection import get_flask_database_connection
 from lib.user_repository import UserRepository, User
 from lib.listing_repository import ListingRepository
+from datetime import datetime
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -98,16 +99,42 @@ def signout():
 #         return render_template('/spaces/all_spaces.html')
 #     else:
 #         return redirect('/login')
+
+# DAVE'S SECTION!!!
+
+# # All spaces '/spaces' ['GET'] PREVIOUS
+# @app.route('/spaces', methods=['GET','POST'])
+# def all_spaces_page():
+#     connection = get_flask_database_connection(app)
+#     listing_repository = ListingRepository(connection)
+#     # # User in session
+#     # if session.get('user_id') is not None:
+#     spaces = listing_repository.all()
+#     if request.method == 'POST':
+#         return render_template('/spaces/filtered_spaces.html', spaces=spaces)
+#     else:
+#         return render_template('/spaces/all_spaces.html', spaces=spaces)
     
-# All spaces '/spaces' ['GET']
-@app.route('/spaces')
+
+# All spaces '/spaces' ['GET'] CHATGPT
+@app.route('/spaces', methods=['GET', 'POST'])
 def all_spaces_page():
     connection = get_flask_database_connection(app)
-    listing_repository = ListingRepository(connection)
-    # # User in session
+        # # User in session
     # if session.get('user_id') is not None:
+    listing_repository = ListingRepository(connection)
     spaces = listing_repository.all()
-    return render_template('/spaces/all_spaces.html', spaces=spaces)
+    if request.method == 'POST':
+        # Parse user-submitted dates from the form
+        date_from = datetime.strptime(request.form['datefrom'], '%Y-%m-%d').date()
+        date_to = datetime.strptime(request.form['dateto'], '%Y-%m-%d').date()
+
+        # Query the 'requests' table to find available listings
+        available_spaces = listing_repository.get_available_spaces(date_from, date_to)
+
+        return render_template('/spaces/filtered_spaces.html', spaces=available_spaces)
+    else:
+        return render_template('/spaces/all_spaces.html', spaces=spaces)    
     # else:
     #     return redirect('/login')
     

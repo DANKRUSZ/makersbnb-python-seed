@@ -42,6 +42,19 @@ class ListingRepository():
         return self.generate_listings(rows)
         
 
+    def get_available_spaces(self, date_from, date_to):
+        query = """
+            SELECT * FROM listings
+            LEFT JOIN requests ON listings.id = listing_id
+            WHERE (request_id IS NULL OR (date_to < ? OR date_from > ?))    
+        """
+        # Execute the query and fetch the results from the database.
+        result = self._connection.execute(query, (date_to, date_from))
+
+        # Process the query result and return a list of available listings.
+        available_listings = [Listing(*row) for row in result.fetchall()]
+        return available_listings
+
   # == DELETE A LISTING =============
 
     # Delete a listing by id
