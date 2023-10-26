@@ -12,8 +12,9 @@
     <div class="header">
         <!-- TODO: This image doesn't work -->
         <img src="/makersbnb-python-seed/static/makers_logo.png" alt="Makers Logo">
-        <a class="about_link" href="/about">About</a>
-        <a class="login_link" href="/login">Login</a>
+        <a class="spaces_link" href="/spaces">Spaces</a>
+        <a class="requests_link" href="/requests">Requests</a>
+        <a class="sign_out_link" href="/signout">Sign out</a>
     </div>
     <!-- HEADER -->
 
@@ -38,14 +39,14 @@
         {% if listing_errors %}
             <!-- If so, we show them. -->
             <p class="t-errors">
-                There were errors with your submission: <br>{{ listing_errors }}
+                There were errors with your listing details: <br>{{ listing_errors }}
             </p>
         {% endif %}
 
         {% if availability_errors %}
         <!-- If so, we show them. -->
         <p class="t-errors">
-            There were errors with your submission: <br>{{ availability_errors }}
+            There were errors with your available dates: <br>{{ availability_errors }}
         </p>
         {% endif %}
 

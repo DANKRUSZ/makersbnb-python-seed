@@ -168,34 +168,35 @@ def list_a_space_post():
     price_string = request.form['price'] #must be numeric -- integer, not float or non-number
 
     #availability
-    available_from_string = request.form['available_from']
-    available_to_string = request.form['available_to'] 
-    #convert to datetime objects
-    available_from = datetime.strptime(available_from_string, '%Y-%m-%d') #must be on or after today
-    available_to = datetime.strptime(available_to_string, '%Y-%m-%d') #must be on or after available_from
+    available_from_string = request.form['available_from'] #cannot be blank, must be on or after today
+    available_to_string = request.form['available_to'] #cannot be blank, must be on or after available_from
 
     #owner_id
     owner_id = session.get('user_id')
 
     # check for errors:
     # Errors listed above in fields.
-    if listing_repository.check_for_errors(title, description, price_string) and availability_repository.check_for_errors(available_from, available_to):
+    if listing_repository.check_for_errors(title, description, price_string) and availability_repository.check_for_errors_new_listing(available_from_string, available_to_string):
         return render_template(
             'spaces/list_a_space.html', 
             listing_errors=listing_repository.generate_errors(title, description, price_string), 
-            availability_errors=availability_repository.generate_errors(available_from, available_to)
+            availability_errors=availability_repository.generate_errors_new_listing(available_from_string, available_to_string)
             ), 400
     elif listing_repository.check_for_errors(title, description, price_string):
         return render_template(
             'spaces/list_a_space.html', 
             listing_errors=listing_repository.generate_errors(title, description, price_string)
             ), 400
-    elif availability_repository.check_for_errors(available_from, available_to):
+    elif availability_repository.check_for_errors_new_listing(available_from_string, available_to_string):
         return render_template(
             'spaces/list_a_space.html', 
-            availability_errors=availability_repository.generate_errors(available_from, available_to)
+            availability_errors=availability_repository.generate_errors_new_listing(available_from_string, available_to_string)
             ), 400
 
+    #convert strings to datetime objects
+    available_from = datetime.strptime(available_from_string, '%Y-%m-%d') #error handling for blanks and invalid date is handled above
+    available_to = datetime.strptime(available_to_string, '%Y-%m-%d') #error handling for blanks and invalid date is handled above
+    #convert price to integer
     price = round(price_string) #error handling for float or non-numeric is handled above.
 
 
@@ -215,7 +216,33 @@ def list_a_space_post():
 
 
 # Single space page '/spaces/<id>' ['GET']
+@app.route('/spaces/<int:id>')
+def single_space_page(id):
+    # User in session
+    if session.get('user_id') is not None:
+        #get the listing object 
+        connection = get_flask_database_connection(app)
+        listing_repository = ListingRepository(connection)
+        listing = listing_repository.find(id)
+
+        #get all the available dates for the listing
+
+        #get all the booked dates for the listing
+
+        #find all free dates for the listing
+
+        return render_template('spaces/show_space2.html', listing=listing, free_dates=[datetime(2023,10,26)], booked_dates=[datetime(2023,10,27)])
+    else:
+        return redirect('/login')
+    
 ## Make a request '/spaces/<id>' ['POST']
+@app.route('/spaces/<int:id>', methods=['POST'])
+def single_space_post_booking_request(id):
+    connection = get_flask_database_connection(app)
+    date = request.form['selected_date'] 
+    return f"{date}"
+
+
 
 
 # All requests for the session user '/requests' ['GET']

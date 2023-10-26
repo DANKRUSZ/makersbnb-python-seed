@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Spaces | Makersbnb</title>
+    <!-- LINK CSS STYLESHEET FOR LATER -->
+    <link rel="stylesheet" href="/style.css" />
+    
+    <!-- CALENDER STYLE AND SCRIPTS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css"> <!-- FullCalendar styles -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script> <!-- FullCalendar script -->
+
+</head>
+<body>
+    <!-- HEADER -- copy to every page once this image is figured out -->
+    <div class="header">
+        <!-- TODO: This image doesn't work -->
+        <img src="/makersbnb-python-seed/static/makers_logo.png" alt="Makers Logo">
+        <a class="about_link" href="/about">About</a>
+        <a class="login_link" href="/login">Login</a>
+    </div>
+    <!-- HEADER -->
+
+    <!-- Single Space Copy -->
+    <div class="single_space_copy">
+        <h1 class="single_space_title">{{ listing.title }}</h1>
+        <p class="single_space_description">
+            {{ listing.description }}
+        </p>
+        <h3 class="single_space_price">
+            £{{ listing.price }} per night
+        </h3>
+    </div>
+    <!-- Single Space Copy -->
+
+    <br>
+    <br>
+
+    <!-- CALENDAR -->
+    <div id="calendar" style="width: 50%; height: 50%;"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var today = new Date(); // Get the current date
+        today.setHours(0, 0, 0, 0); // Set the time to the beginning of the day (midnight)
+
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            validRange: {
+                start: today.toISOString(), // Start date is today
+                end: '9999-12-31' // End date is a far future date
+            },
+            events: [
+                // booked dates -- unavailable
+                {% for date in booked_dates %}
+                {
+                    title: 'Booked',
+                    start: '{{ date }}',
+                    end: '{{ date }}',
+                    color: 'gray'
+                },
+                {% endfor %}
+
+                {% for date in free_dates %}
+                {
+                    title: 'Available',
+                    start: '{{ date }}',
+                    end: '{{ date }}',
+                    color: 'green'
+                },
+                {% endfor %}
+
+
+            ],
+            eventClick: function(info) {
+                var clickedDate = info.event.start.toISOString().split('T')[0];
+                if (booked_dates.includes(clickedDate)) {
+                alert('This date is already booked.');
+                } else if (free_dates.includes(clickedDate)) {
+                    alert('You can book this date!');
+                    // Handle booking logic here
+            }
+            },
+            eventAllow: function(info) {
+            var clickedDate = info.event.start.toISOString().split('T')[0];
+            return !bookedDates.includes(clickedDate);
+            }
+
+
+        });
+        calendar.render();
+    });
+</script>
+    <!-- CALENDAR -->
+
+
+    
+    
+
+    
+</body>
+</html>
