@@ -1,8 +1,10 @@
 import os
 from flask import Flask, request, render_template, session, redirect, url_for
 from lib.database_connection import get_flask_database_connection
-from lib.user_repository import UserRepository, User
-
+from lib.user_repository import UserRepository
+from lib.listing_repository import ListingRepository
+from lib.date_listing_repo import DateListingRepo
+from datetime import datetime, timedelta
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -92,19 +94,40 @@ def signout():
 
 # ======== AUTHENTICATION-ONLY ROUTES =================== #
 
-# # All spaces '/spaces' ['GET']
+# All spaces '/spaces' ['GET']
 # @app.route('/spaces')
 # def all_spaces_page():
 #     # User in session
 #     if session.get('user_id') is not None:
-#         return render_template('/spaces/all_spaces.html')
+#         return render_template('spaces/all_spaces.html')
 #     else:
 #         return redirect('/login')
+    
 
-# DAVE'S SECTION!!!
+#TODO - the issue seems to be that the dates are not being successfully sumbitted to the SQL query. :-(
+# All spaces '/spaces' ['GET'] PREVIOUS
+@app.route('/spaces', methods=['GET','POST'])
+def all_spaces_page():
+    connection = get_flask_database_connection(app)
+    listing_repository = ListingRepository(connection)
+    # # User in session
+    # if session.get('user_id') is not None:
+    spaces = listing_repository.all()
+    if request.method == 'POST':
+        date_from = request.form['date_from']
+        print(date_from)
+        date_to = request.form['date_to']
+        print(date_from)
+        # date_from = datetime.strptime(date_from_str, '%Y-%m-%d').date()
+        # date_to = datetime.strptime(date_to_str, '%Y-%m-%d').date()
+        avail_spaces = listing_repository.get_available_spaces(date_from, date_to)
+        return render_template('/spaces/filtered_spaces.html', spaces=avail_spaces)
+    else:
+        return render_template('/spaces/all_spaces.html', spaces=spaces)
+#     else:
+#         return redirect('/login')   
 
-# # All spaces '/spaces' ['GET'] PREVIOUS
-# @app.route('/spaces', methods=['GET','POST'])
+
 # def all_spaces_page():
 #     connection = get_flask_database_connection(app)
 #     listing_repository = ListingRepository(connection)
@@ -117,15 +140,6 @@ def signout():
 #         return render_template('/spaces/all_spaces.html', spaces=spaces)
     
 
-# All spaces '/spaces' ['GET'] CHATGPT
-@app.route('/spaces', methods=['GET', 'POST'])
-def all_spaces_page():
-    # User in session
-    if session.get('user_id') is not None:
-        return render_template('/spaces/all_spaces.html')
-    else:
-        return redirect('/login')
-    
 
 
 # List a space '/spaces/new' ['GET']

@@ -35,9 +35,9 @@
     <form action="/spaces" method="post">
         <p>
         <label for="DateFrom">Available From:</label>
-        <input type="date" name="datefrom" id="datefrom">
+        <input type="date" name="date_from" id="date_from">
         <label for="DateTo">Available To:</label>
-        <input type="date" name="dateto" id="dateto">
+        <input type="date" name="date_to" id="date_to">
         <!-- <label for="listspacesavailable">List Spaces Available</label> -->
         <input type="submit" value="List Spaces">
         </p>
@@ -49,6 +49,7 @@
         - POST filters spaces to dates selected        
         - each space in the list takes you to a new confirmation page  -->
 
+        <!-- TODO filtering of relevant spaces-->
     {% for space in spaces %}
     <article>
         <h2 class="t-title">{{space.title}}</h2>

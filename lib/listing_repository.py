@@ -76,18 +76,15 @@ class ListingRepository():
             errors.append("Price must be a whole number")
         return ", ".join(errors)
 
-
+#TODO - related to the filtering of spaces on the all spaces page - SQL not working!!
     def get_available_spaces(self, date_from, date_to):
-        query = """
-            SELECT * FROM listings
-            LEFT JOIN requests ON listings.id = listing_id
-            WHERE (request_id IS NULL OR (date_to < ? OR date_from > ?))    
-        """
-        # Execute the query and fetch the results from the database.
+        query = "SELECT * FROM listings LEFT JOIN requests ON listings.id = listing_id WHERE (requester_id IS NULL OR (date_requested NOT BETWEEN %s AND %s));"
         result = self._connection.execute(query, (date_to, date_from))
-
-        # Process the query result and return a list of available listings.
-        available_listings = [Listing(*row) for row in result.fetchall()]
+        print(result)
+        available_listings = []
+        for row in result:
+            listing = Listing(*row)
+            available_listings.append(listing)
         return available_listings
 
   # == DELETE A LISTING =============
