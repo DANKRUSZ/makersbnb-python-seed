@@ -10,7 +10,7 @@ def test_all(db_connection):
     db_connection.seed("seeds/makers_bnb.sql")
     repository = DateListingRepo(db_connection)
 
-    assert repository.all() == [
+    assert sorted(repository.all(),  key=lambda x: x.id) == [
         DateListing(1, date(2023,10,24), 1, 1),
         DateListing(2, date(2023,10,24), 2, None),
         DateListing(3, date(2023,10,24), 3, None),
@@ -38,7 +38,7 @@ def test_create(db_connection):
     repository = DateListingRepo(db_connection)
 
     assert repository.create(date(2023,10,23), 4, 3) == 5
-    assert repository.all() == [
+    assert sorted(repository.all(),  key=lambda x: x.id) == [
         DateListing(1, date(2023,10,24), 1, 1),
         DateListing(2, date(2023,10,24), 2, None),
         DateListing(3, date(2023,10,24), 3, None),
@@ -46,7 +46,7 @@ def test_create(db_connection):
         DateListing(5, date(2023,10,23), 4, 3)
         ]
     assert repository.create(date(2023,10,23), 4, None) == 6
-    assert repository.all() == [
+    assert sorted(repository.all(),  key=lambda x: x.id) == [
         DateListing(1, date(2023,10,24), 1, 1),
         DateListing(2, date(2023,10,24), 2, None),
         DateListing(3, date(2023,10,24), 3, None),
