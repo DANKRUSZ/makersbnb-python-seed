@@ -178,7 +178,33 @@ def list_a_space_post():
 
 
 # Single space page '/spaces/<id>' ['GET']
+@app.route('/spaces/<int:id>')
+def single_space_page(id):
+    # User in session
+    if session.get('user_id') is not None:
+        #get the listing object 
+        connection = get_flask_database_connection(app)
+        listing_repository = ListingRepository(connection)
+        listing = listing_repository.find(id)
+
+        #get all the available dates for the listing
+
+        #get all the booked dates for the listing
+
+        #find all free dates for the listing
+
+        return render_template('spaces/show_space2.html', listing=listing, free_dates=[datetime(2023,10,26)], booked_dates=[datetime(2023,10,27)])
+    else:
+        return redirect('/login')
+    
 ## Make a request '/spaces/<id>' ['POST']
+@app.route('/spaces/<int:id>', methods=['POST'])
+def single_space_post_booking_request(id):
+    connection = get_flask_database_connection(app)
+    date = request.form['selected_date'] 
+    return f"{date}"
+
+
 
 
 # All requests for the session user '/requests' ['GET']
