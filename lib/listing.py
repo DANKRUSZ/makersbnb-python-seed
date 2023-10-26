@@ -1,6 +1,6 @@
 class Listing():
    
-    def __init__(self, id, owner_id, title, description, price):
+    def __init__(self, id, title, description, price, owner_id):
         self.id = id
         self.owner_id = owner_id  # foreign key to user_id
         self.title = title
