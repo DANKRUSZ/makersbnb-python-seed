@@ -79,12 +79,11 @@ class ListingRepository():
 #TODO - related to the filtering of spaces on the all spaces page - SQL not working!!
     def get_available_spaces(self, date_from, date_to):
         query = "SELECT * FROM listings LEFT JOIN requests ON listings.id = listing_id WHERE (requester_id IS NULL OR (date_requested NOT BETWEEN %s AND %s));"
-        result = self._connection.execute(query, (date_to, date_from))
-        print(result)
+        rows = self._connection.execute(query, (date_to, date_from))
+        print(rows)
         available_listings = []
-        for row in result:
-            listing = Listing(*row)
-            available_listings.append(listing)
+        for row in rows:
+            available_listings.append(row.id)
         return available_listings
 
   # == DELETE A LISTING =============
