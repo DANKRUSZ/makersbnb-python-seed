@@ -4,25 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Makersbnb</title>
-    <!-- LINK CSS STYLESHEET FOR LATER -->
-    <link rel="stylesheet" href="/style.css" />
-</head>
-<body>
-    <!-- HEADER -- copy to every page once this image is figured out -->
-    <div class="header">
-        <!-- TODO: This image doesn't work -->
-        <img src="/makersbnb-python-seed/static/makers_logo.png" alt="Makers Logo">
-        <a class="about_link" href="/about">About</a>
-        <a class="login_link" href="/login">Login</a>
-    </div>
-    <!-- HEADER -->
+<!-------------------------- START COPYING TO EVERY PAGE -------------------------------->
 
-    <br>
-    <br>
+    <!-- IN-DOC STYLESHEET: -->
+    <style>
+        body {
+            font-size: 18px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 20px 30px; /* Add margin top/bottom, right/left */
+        }
+        /* LINK COLOUR */
+        a:link {
+            color: black; /* Change this to your desired color */
+        }
+        a:visited {
+            color: black; /* Change this to your desired color */
+        }
+        /* Increase the size of date input fields */
+        input[type="text"] {
+            width: 70%;
+            height: 25px; /* Adjust the height to your preference */
+        }
+        input[type="password"] {
+            width: 70%;
+            height: 25px; /* Adjust the height to your preference */
+        }
+        .sign_up_button {
+        background-color: transparent; /* Remove the background color */
+        border: 2px solid #000;
+        padding: 4px 15px;
+        box-shadow: 5px 5px 0px #000;
+        font-family: 'Comic Sans MS', cursive, sans-serif; /* Set the font */
+        font-size: 18px;
+        margin-right: 5px;
+        margin-bottom: 10px
+    }
+    </style>
+
+</head>
+
+<body>
+<!-- HEADER NO AUTH -- copy to every page once this image is figured out -->
+    <div class="header">
+        <!-- LINKABLE LOGO -->
+        <a href="/" style="text-decoration: none;">
+            <div class="logo-container" style="float: left; background-color: black; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center;">
+                <span style="color: white; font-family: 'Comic Sans MS', cursive, sans-serif; font-size: 40px;">M</span>
+            </div>
+        </a>
+        <!-- HEADER LINKS -->
+        <div class="header_links" style="text-align: right;">
+            <a class="about_link" href="/about">About</a> |
+            <a class="login_link" href="/login">Login</a>
+    </div>  
+
+<!-- HEADER NO AUTH -- copy to every page once this image is figured out -->
+<!-------------------------- STOP COPYING TO EVERY PAGE -------------------------------->
+<br>
+<br>
+
+
+    <h2 class="login_form_header" style="text-align: center;">Log in to Makersbnb</h2>
 
     <!-- LOG IN FORM -->
-    <div class="login_form">
-        <h2 class="login_form_header">Log in to Makersbnb</h2>
+    <div class="login_form" style="border: 2px solid #000; padding: 30px; margin-left: 280px; margin-right: 280px; text-align: center;">
         <form class="login_form_fields" action="/login" method="post">
 
         <!-- We check to see if there are any errors from a previous submission -->
@@ -34,20 +79,25 @@
         {% endif %}
 
         <!-- FORM FIELDS -->
-        <p>
-            <label for="email">Email</label>
-            <input type="text" name="email" id="email">
-        </p>
-        <p>
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password">
-        </p>
-
-        <!-- SUBMIT BUTTON -->
-        <p>
-            <input type="submit" value="Log in">
-        </p>
-
+        <div style="text-align: left; margin: 0 auto; width: 80%;">
+            <p style="margin-left: 90px;">
+                <label for="email">Email Address</label>
+            </p>
+            <p style="margin-left: 90px;">
+                <input type="text" name="email" id="email">
+            </p>
+            <p style="margin-left: 90px;">
+                <label for="password">Password</label>
+            </p>
+            <p style="margin-left: 90px;">
+                <input type="password" name="password" id="password">
+            </p>
+        </div>
+        
+         <!-- SUBMIT BUTTON -->
+         <button type="submit" class="sign_up_button" style="text-align: center;">
+            Log in
+        </button>
 
         </form>
     </div>

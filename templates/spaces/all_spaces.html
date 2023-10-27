@@ -3,58 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book a Space</title>
-    <!-- LINK CSS STYLESHEET FOR LATER -->
-    <link rel="stylesheet" href="/style.css" />
+    <title>All Spaces | Makersbnb</title>
+<!-------------------------- START COPYING TO EVERY PAGE -------------------------------->
+
+    <!-- IN-DOC STYLESHEET: -->
+    <style>
+        body {
+            font-size: 18px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 20px 30px; /* Add margin top/bottom, right/left */
+        }
+        /* LINK COLOUR */
+        a:link {
+            color: black; /* Change this to your desired color */
+        }
+        a:visited {
+            color: black; /* Change this to your desired color */
+        }
+        /* Increase the size of date input fields */
+        input[type="date"] {
+            width: 60%;
+            height: 25px; /* Adjust the height to your preference */
+        }
+        .search_dates_button {
+        background-color: transparent; /* Remove the background color */
+        border: 2px solid #000;
+        padding: 3px 10px;
+        box-shadow: 5px 5px 0px #000;
+        font-family: 'Comic Sans MS', cursive, sans-serif; /* Set the font */
+        font-size: 18px;
+        margin-right: 5px
+    }
+    </style>
+
+    <!-- CSS STYLESHEET LINK NOT WORKING -->
+    <!-- <link rel="stylesheet" href="/style.css" /> -->
 </head>
 <body>
     <!-- HEADER WITH AUTH -- copy to every page once this image is figured out -->
     <div class="header">
-        <!-- TODO: This image doesn't work -->
-        <img src="/makersbnb-python-seed/static/makers_logo.png" alt="Makers Logo">
-        <a class="spaces_link" href="/spaces">Spaces</a>
-        <a class="requests_link" href="/requests">Requests</a>
-        <a class="sign_out_link" href="/signout">Sign out</a>
+        <!-- LINKABLE LOGO -->
+        <a href="/" style="text-decoration: none;">
+            <div class="logo-container" style="float: left; background-color: black; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center;">
+                <span style="color: white; font-family: 'Comic Sans MS', cursive, sans-serif; font-size: 40px;">M</span>
+            </div>
+        </a>
+        <!-- HEADER LINKS -->
+        <div class="header_links" style="text-align: right;">
+            <a class="spaces_link" href="/spaces">Spaces</a> |
+            <a class="requests_link" href="/requests">Requests</a> |
+            <a class="sign_out_link" href="/signout">Sign out</a>
+        
     </div>
     <!-- HEADER WITH AUTH-->
 
+<!-------------------------- STOP COPYING TO EVERY PAGE -------------------------------->
+    <br>
+    <br>
 
     <!-- BOOK A SPACE -->
-    <div class="airbnb_copy">
-        <h1 class="airbnb_copy_slogan">Book a Space</h1>
-
+    <div class="book_a_space_copy" style="text-align: center;">
+        <h1 class="book_a_space_header">Book a Space</h1>
+        <p class="book_a_space_blurb">
+            Anywhere can feel like home with Makersbnb.<br>
+            We have all kinds of unique spaces available!
+        </p>
     </div>
     <!-- BOOK A SPACE -->
 
+    <br>
+
     <!-- List A Space button - centrally centred -->
-    <div><a class="list_space_link" href="/spaces/new">List A Space</a></div>
+    <div style="text-align: center;">
+        <a class="list_space_link" href="/spaces/new" style="border: 2px solid #000; 
+        padding-left: 10px; padding-right: 10px; padding-top: 3px; padding-bottom: 5px;
+        box-shadow: 5px 5px 0px #000;">
+            List A Space
+        </a>
+    </div>
 
+    <br>
+    <br>
 
+    <!-- SEARCH FOR LISTINGS AVAILABLE ON A SPECIFIC DATE -->
     <!-- Available From form (limit input to dates?) +  Available To form (limit input to dates?)  +   List Spaces button (POST) -->
+    <form class="search_dates" action="/spaces" method="post">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px">
+            <div style="display: flex; flex-direction: column; align-items: left;">
+                <label for="DateFrom">Available from:</label>
+                <input type="date" name="date_from" id="datefrom">
+            </div>
 
-    <form action="/spaces" method="post">
-        <p>
-        <label for="DateFrom">Available From:</label>
-        <input type="date" name="date_from" id="datefrom">
-        <label for="DateTo">Available To:</label>
-        <input type="date" name="date_to" id="dateto">
-        <!-- <label for="listspacesavailable">List Spaces Available</label> -->
-        <input type="submit" value="List Spaces">
-        </p>
+            <div style="display: flex; flex-direction: column; align-items: left;">
+                <label for="DateTo">Available to:</label>
+                <input type="date" name="date_to" id="dateto">
+            </div>
+
+            <button type="submit" class="search_dates_button" style="grid-column: 3 / span 1; text-align: center;">
+                Search Spaces
+            </button>
+        </div>
     </form>
+    <!-- SEARCH FOR LISTINGS AVAILABLE ON A SPECIFIC DATE -->
 
 
+    <br>
+    <br>
+
+    <!-- DISPLAY LISTINGS -->
     <!-- For loop of spaces available in those dates
         - begins will all spaces
         - POST filters spaces to dates selected        
         - each space in the list takes you to a new confirmation page  -->
 
-    {% for space in spaces %}
-    <article>
-        <h2 class="t-title">{{space.title}}</h2>
-        <p class="t-content">{{space.description}}</p>
-    </article>
-    {% endfor %}
+    <div class="all_spaces_list" style="border: 2px solid #000; padding: 30px;">
+        
+        {% for space in spaces %}
+        <a href="/spaces/{{ space.id }}">
+            <div class="individual_space" style="border: 2px solid #000; padding-left: 20px; margin-bottom: 25px;">
+                <h2 class="t-title">{{space.title}}</h2>
+                <p class="t-content">{{space.description}}</p>
+            </div>
+        </a>
+        {% endfor %}
+
+    </div>
+
 
 </body>
 </html>

@@ -3,39 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <!-- LINK CSS STYLESHEET FOR LATER -->
-    <link rel="stylesheet" href="/style.css" />
+    <title>About | Makersbnb</title>
+<!-------------------------- START COPYING TO EVERY PAGE -------------------------------->
+
+    <!-- IN-DOC STYLESHEET: -->
+    <style>
+        body {
+            font-size: 18px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 20px 30px; /* Add margin top/bottom, right/left */
+        }
+        /* LINK COLOUR */
+        a:link {
+            color: black; /* Change this to your desired color */
+        }
+        a:visited {
+            color: black; /* Change this to your desired color */
+        }
+        /* Increase the size of date input fields */
+        input[type="date"] {
+            width: 60%;
+            height: 25px; /* Adjust the height to your preference */
+        }
+        .search_dates_button {
+        background-color: transparent; /* Remove the background color */
+        border: 2px solid #000;
+        padding: 3px 10px;
+        box-shadow: 5px 5px 0px #000;
+        font-family: 'Comic Sans MS', cursive, sans-serif; /* Set the font */
+        font-size: 18px;
+        margin-right: 5px
+    }
+    </style>
 
 </head>
-<body>
-<!-- HEADER -- copy to every page once this image is figured out -->
-    <div class="header">
-        <!-- TODO: This image doesn't work -->
-        <img src="/makersbnb_routes_ticket/static/makers_logo_test.png" alt="Makers Logo">
-        <a class="about_link" href="/about">About</a>
-        <a class="login_link" href="/login">Login</a>
-    </div>
-<!-- HEADER -- copy to every page once this image is figured out -->
 
+<body>
+<!-- HEADER NO AUTH -- copy to every page once this image is figured out -->
+    <div class="header">
+        <!-- LINKABLE LOGO -->
+        <a href="/" style="text-decoration: none;">
+            <div class="logo-container" style="float: left; background-color: black; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center;">
+                <span style="color: white; font-family: 'Comic Sans MS', cursive, sans-serif; font-size: 40px;">M</span>
+            </div>
+        </a>
+        <!-- HEADER LINKS -->
+        <div class="header_links" style="text-align: right;">
+            <a class="about_link" href="/about">About</a> |
+            <a class="login_link" href="/login">Login</a>
+    </div>  
+
+<!-- HEADER NO AUTH -- copy to every page once this image is figured out -->
+<!-------------------------- STOP COPYING TO EVERY PAGE -------------------------------->
+<br>
+<br>
 
 <!-- PROJECT ABOUT -->
-    <div class="Project About">
+    <div class="project_about" style="text-align: center;">
         
         <h1 class="makers_bnb">Makers Bnb</h1>
-
-        <!-- TODO: LOGO: This image doesn't work -->
-        <img src="/makersbnb_routes_ticket/static/makers_logo_test.png" alt="Makers Logo">
-
         <p class="makers_bnb_about_text">
             Makersbnb is the first group project on Software Engineering Fundamentals at <a class="makers_link" href="https://makers.tech">Makers Academy</a>.<br>
-            This project aims to demonstrate the ability to create a full-stack web application with a relational database, working asynchronously in teams.<br>
-            <br>
-            <a class="project_brief" href="https://github.com/makersacademy/engineering-project-1"><b>Project Brief</b></a>
-            <a class="project_github" href="https://github.com/DANKRUSZ/makersbnb-python-seed"><b>Project Brief</b></a>
+            This project aims to demonstrate the ability to create a full-stack web application with a relational<br>database, working asynchronously in teams.
+
             <br>
             <br>
-            Project by: David, Daniel, Onoura, Claire <!-- TODO: link names with individual githubs -->
+            <br>
         </p>
         <!-- <p>Tech used:</p>
         <ul>
@@ -48,6 +81,34 @@
             <li>CSS</li>
         </ul> -->
     </div>
+    
+    <div class="project_by" style="text-align: center; border: 2px solid #000; padding: 25px; padding-bottom: 40px; margin-left: 200px; margin-right:200px">
+        <b>Project by:</b>
+        <br>
+        <a class="github_link" href="https://github.com/clairep94">Claire Peng</a>,
+        <a class="github_link" href="https://github.com/SoundMotives">David O'Donnell</a>, 
+        <a class="github_link" href="https://github.com/DANKRUSZ">Daniel Kruszewski</a>, 
+        <a class="github_link" href="https://github.com/ow1609">Onoura Wright</a>
+        
+    </div>
+
+    <div style="text-align: center; margin: 35px">
+        <a class="list_space_link" href="https://github.com/makersacademy/engineering-project-1" style="border: 2px solid #000; 
+        padding-left: 10px; padding-right: 10px; padding-top: 3px; padding-bottom: 5px;
+        box-shadow: 5px 5px 0px #000;">
+            Project Brief
+        </a>
+    </div>
+
+    <div style="text-align: center; margin: 35px">
+        <a class="list_space_link" href="https://github.com/DANKRUSZ/makersbnb-python-seed" style="border: 2px solid #000; 
+        padding-left: 10px; padding-right: 10px; padding-top: 3px; padding-bottom: 5px;
+        box-shadow: 5px 5px 0px #000;">
+            Project Github
+        </a>
+    </div>
+
+
 <!-- PROJECT ABOUT -->
 
 

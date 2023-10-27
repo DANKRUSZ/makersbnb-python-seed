@@ -86,60 +86,42 @@ def login_post():
 # Logging In_Get_Post: -- allows for button or hyperlink
 @app.route('/signout', methods=['GET','POST'])
 def signout():
-    user_id = session.get('user_id')
-    session.pop(user_id, None)
-    print(f"app.py(90) Logout successful")
+    # Clear the user_id from the session
+    session.pop('user_id', None)
 
-    return redirect('/login')
+    # Redirect to the root URL or any desired URL after logout
+    return redirect('/')
 
 
 # ======== AUTHENTICATION-ONLY ROUTES =================== #
 
-# All spaces '/spaces' ['GET']
-# @app.route('/spaces')
-# def all_spaces_page():
-#     # User in session
-#     if session.get('user_id') is not None:
-#         return render_template('spaces/all_spaces.html')
-#     else:
-#         return redirect('/login')
-    
+# ======== ALL SPACES, LIST A SPACE & INDIVIDUAL SPACE ROUTES =================== #
 
 #TODO - the issue seems to be that the dates are not being successfully sumbitted to the SQL query. :-(
-# All spaces '/spaces' ['GET'] PREVIOUS
 @app.route('/spaces', methods=['GET','POST'])
 def all_spaces_page():
-    connection = get_flask_database_connection(app)
-    listing_repository = ListingRepository(connection)
-    # # User in session
-    # if session.get('user_id') is not None:
-    spaces = listing_repository.all()
-    if request.method == 'POST':
-        date_from = request.form['date_from']
-        print(date_from)
-        date_to = request.form['date_to']
-        print(date_from)
-        # date_from = datetime.strptime(date_from_str, '%Y-%m-%d').date()
-        # date_to = datetime.strptime(date_to_str, '%Y-%m-%d').date()
-        avail_spaces = listing_repository.get_available_spaces(date_from, date_to)
-        return render_template('/spaces/filtered_spaces.html', spaces=avail_spaces)
+    # User in session
+    if session.get('user_id') is not None:
+        connection = get_flask_database_connection(app)
+        listing_repository = ListingRepository(connection)    
+        spaces = listing_repository.all()
+
+        if request.method == 'POST':
+            date_from_string = request.form['date_from']
+            date_to_string = request.form['date_to']
+            #TODO: error handling for blank fields;
+            #TODO: search_spaces = listing_repository.get_available_spaces(date_from, date_to)
+            # date_from = datetime.strptime(date_from_string, '%Y-%m-%d')
+            # date_to = datetime.strptime(date_to_string, '%Y-%m-%d')
+            # avail_spaces = listing_repository.get_available_spaces(date_from, date_to)
+            # return render_template('/spaces/all_spaces.html', spaces=avail_spaces)
+            return f"Date from: {date_from_string}, Date to: {date_to_string}"
+        
+            # return render_template('/spaces/all_spaces.html', spaces=searched_spaces)
+        else:
+            return render_template('/spaces/all_spaces.html', spaces=spaces)
     else:
-        return render_template('/spaces/all_spaces.html', spaces=spaces)
-#     else:
-#         return redirect('/login')   
-
-
-# def all_spaces_page():
-#     connection = get_flask_database_connection(app)
-#     listing_repository = ListingRepository(connection)
-#     # # User in session
-#     # if session.get('user_id') is not None:
-#     spaces = listing_repository.all()
-#     if request.method == 'POST':
-#         return render_template('/spaces/filtered_spaces.html', spaces=spaces)
-#     else:
-#         return render_template('/spaces/all_spaces.html', spaces=spaces)
-    
+        return redirect('/login')   
 
 
 
@@ -151,7 +133,6 @@ def list_a_space_page():
         return render_template('spaces/list_a_space.html')
     else:
         return redirect('/login')
-
 
 # List a space_post '/spaces/new' ['POST']
 @app.route('/spaces/new', methods=['POST'])
@@ -197,9 +178,9 @@ def list_a_space_post():
     #convert strings to datetime objects
     available_from = datetime.strptime(available_from_string, '%Y-%m-%d') #error handling for blanks and invalid date is handled above
     available_to = datetime.strptime(available_to_string, '%Y-%m-%d') #error handling for blanks and invalid date is handled above
+    
     #convert price to integer
-    price = round(price_string) #error handling for float or non-numeric is handled above.
-
+    price = int(price_string) #error handling for float or non-numeric is handled above.
 
     #listing
     listing_id = listing_repository.create(title=title, description=description, price=price, owner_id=owner_id)
@@ -208,12 +189,12 @@ def list_a_space_post():
     #availability -- make a new available date for the new listing for each date in the date range, inclusive
     new_availability_date = available_from
     while new_availability_date <= available_to:
-        new_availability_id = availability_repository.create(date_available=new_availability_date, listing_id=listing_id, requester_id=None)
+        new_availability_id = availability_repository.create(date_available=new_availability_date, listing_id=listing_id, request_id=None)
         print(f"New availability date for listing {listing_id}, id: {new_availability_id}, date:{new_availability_date}")
         new_availability_date += timedelta(days=1)
     
-    # return redirect(f'/spaces/{listing_id}') #redirect to the new listing's page
-    return redirect('/spaces')
+    return redirect(f'/spaces/{listing_id}') #redirect to the new listing's page
+
 
 
 # Single space page '/spaces/<id>' ['GET']
@@ -226,6 +207,7 @@ def single_space_page(id):
         listing_repository = ListingRepository(connection)
         listing = listing_repository.find(id)
 
+        #TODO
         #get all the available dates for the listing
 
         #get all the booked dates for the listing
@@ -235,15 +217,28 @@ def single_space_page(id):
         return render_template('spaces/show_space2.html', listing=listing, free_dates=[datetime(2023,10,26)], booked_dates=[datetime(2023,10,27)])
     else:
         return redirect('/login')
-    
+
+
+# ======== ALL REQUESTS, MAKER A REQUEST & INDIVIDUAL REQUEST ROUTES =================== #
+
 ## Make a request '/spaces/<id>' ['POST']
 @app.route('/spaces/<int:id>', methods=['POST'])
 def single_space_post_booking_request(id):
     connection = get_flask_database_connection(app)
-    date = request.form['selected_date'] 
-    return f"{date}"
+    repository = RequestRepository(connection)
 
+    #Get requested date & convert to datetime object
+    date_string = request.form['selected_date']
+    print(date_string)
+    date = datetime.strptime(date_string, '%Y-%m-%d %H:%M:%S')
 
+    #Get session users's id
+    requester_id = session.get('user_id')
+
+    #Create new request
+    request_id = repository.create(date_requested=date, listing_id=id, requester_id=requester_id, confirmed=None)
+    
+    return redirect(f'/requests/{request_id}')
 
 
 # All requests for the session user '/requests' ['GET']
@@ -252,15 +247,45 @@ def single_space_post_booking_request(id):
 def get_requests():
     connection = get_flask_database_connection(app)
     repository = RequestRepository(connection)
+
     requester_id = session.get('user_id')
     owner_id = session.get('user_id')
     requests_made = repository.requests_made(requester_id)
     requests_received = repository.requests_received(owner_id)
+
     return render_template('requests/requests.html', requests_made=requests_made, requests_received=requests_received)
 
 # Single request page '/requests/<id>' ['GET']
+@app.route('/requests/<int:id>')
+def single_request_get(id):
+    connection = get_flask_database_connection(app)
+    repository = RequestRepository(connection)
+    session_user = session.get('user_id')
+    # request = repository.find_this_request_details(id)
+    
+
+    if repository.check_if_owned_by(request_id=id, user_id=session_user):
+        return "You own this"
+        # other_requests = repository.find_other_requests(request)
+        # return render_template('requests/single_request_owner.html', this_request=request, other_requests=other_requests)
+
+    else:
+        return "You don't own this"
+        # listing_id = request['listing_id']
+        # print(listing_id)
+        # # owner_email = repository.find_owner_email(listing_id=request['listing_id']))
+        # return render_template('requests/single_request.html', this_request=request, owner_email=owner_email)
+
+
 ## Confirm request '/requests/<id>/confirm' ['POST']
+@app.route('/requests/<int:id>', methods=['POST'])
+def single_request_confirm_post(id):
+    pass
+
 ## Deny request '/requests/<id>/deny' ['POST']
+@app.route('/requests/<int:id>', methods=['POST'])
+def single_request_deny_post(id):
+    pass
 
 
 # ===================== EXAMPLE ROUTES =================================== #
@@ -276,4 +301,4 @@ def get_index():
 # They also start the server configured to use the test database
 # if started in test mode.
 if __name__ == '__main__':
-    app.run(debug=True, port=int(os.environ.get('PORT', 5000)))
+    app.run(debug=True, port=int(os.environ.get('PORT', 5001)))

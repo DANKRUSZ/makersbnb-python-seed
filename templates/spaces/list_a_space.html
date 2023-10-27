@@ -4,22 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List a Space | Makersbnb</title>
-    <!-- LINK CSS STYLESHEET FOR LATER -->
-    <link rel="stylesheet" href="/style.css" />
+<!-------------------------- START COPYING TO EVERY PAGE -------------------------------->
+
+    <!-- IN-DOC STYLESHEET: -->
+    <style>
+        body {
+            font-size: 18px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 20px 30px; /* Add margin top/bottom, right/left */
+        }
+        /* LINK COLOUR */
+        a:link {
+            color: black; /* Change this to your desired color */
+        }
+        a:visited {
+            color: black; /* Change this to your desired color */
+        }
+        /* Increase the size of date input fields */
+        input[id="name"] {
+            width: 85%;
+            height: 25px; /* Adjust the height to your preference */
+        }
+        /* Increase the size of date input fields */
+        input[id="price"] {
+            width: 40%;
+            height: 25px; /* Adjust the height to your preference */
+        }
+        /* Increase the size of date input fields */
+        input[type="date"] {
+            width: 40%;
+            height: 25px; /* Adjust the height to your preference */
+        }
+
+        .list_space_button {
+        background-color: transparent; /* Remove the background color */
+        border: 2px solid #000;
+        padding: 8px 15px;
+        box-shadow: 5px 5px 0px #000;
+        font-family: 'Comic Sans MS', cursive, sans-serif; /* Set the font */
+        font-size: 18px;
+        margin-right: 5px
+    }
+    </style>
+
 </head>
 <body>
-    <!-- HEADER -- copy to every page once this image is figured out -->
+    <!-- HEADER WITH AUTH -- copy to every page once this image is figured out -->
     <div class="header">
-        <!-- TODO: This image doesn't work -->
-        <img src="/makersbnb-python-seed/static/makers_logo.png" alt="Makers Logo">
-        <a class="spaces_link" href="/spaces">Spaces</a>
-        <a class="requests_link" href="/requests">Requests</a>
-        <a class="sign_out_link" href="/signout">Sign out</a>
+        <!-- LINKABLE LOGO -->
+        <a href="/" style="text-decoration: none;">
+            <div class="logo-container" style="float: left; background-color: black; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center;">
+                <span style="color: white; font-family: 'Comic Sans MS', cursive, sans-serif; font-size: 40px;">M</span>
+            </div>
+        </a>
+        <!-- HEADER LINKS -->
+        <div class="header_links" style="text-align: right;">
+            <a class="spaces_link" href="/spaces">Spaces</a> |
+            <a class="requests_link" href="/requests">Requests</a> |
+            <a class="sign_out_link" href="/signout">Sign out</a>
+        
     </div>
-    <!-- HEADER -->
+    <!-- HEADER WITH AUTH-->
 
+<!-------------------------- STOP COPYING TO EVERY PAGE -------------------------------->
+    <br>
+    <br>
     <!-- List a Space Copy -->
-    <div class="list_a_space_copy">
+    <div class="list_a_space_copy" style="text-align: center;">
         <h1 class="list_a_space_copy_slogan">List a Space</h1>
         <p class="list_a_space_copy_text">
             With Makersbnb, any space can be a little extra pocket money.<br>
@@ -32,7 +83,7 @@
     <br>
 
     <!-- List a Space Form -->
-    <div class="list_a_space_form">
+    <div class="list_a_space_form" style="border: 2px solid #000; padding: 30px; text-align: center;">
         <form class="list_a_space_form_fields" action="/spaces/new" method="post">
 
         <!-- We check to see if there are any errors from a previous submission -->
@@ -52,32 +103,48 @@
 
 
         <!-- FORM FIELDS -->
-        <p>
-            <label for="name">Name</label>
-            <input type="text" name="name" id="name">
-        </p>
-        <p>
-            <label for="description">Description</label>
-            <input type="text" name="description" id="description">
-        </p>
-        <p>
-            <label for="price">Price per Night (£)</label>
-            <input type="number" name="price" id="price" min="10" max="1000">
-        </p>
-        <p>
-            <label for="available_from">Available from</label>
-            <input type="date" name="available_from" id="available_from" min="2023-10-26" max="2024-10-26" >
-        </p>
+        <div style="text-align: left; margin: 0 auto; width: 80%; padding-bottom: 10px;">
+            <p style="margin-left: 90px;">
+                <label for="name">Name</label>
+            </p>
+            <p style="margin-left: 90px;">
+                <input type="text" name="name" id="name">
+            </p>
+            <p style="margin-left: 90px;">
+                <label for="description">Description</label>
+            </p>
+            <p style="margin-left: 90px;">
+                <textarea name="description" id="description" style="width: 85%; height: 100px; padding: 10px;"></textarea>
+            </p>
+            <p style="margin-left: 90px;">
+                <label for="price">Price per Night (£)</label>
+            </p>
+            <p style="margin-left: 90px;">
+                <input type="number" name="price" id="price" min="10" max="1000">
+            </p>
+            <p style="margin-left: 90px;">
+                <label for="available_from">Available from</label>
+            </p>
+            <p style="margin-left: 90px;">
+                <input type="date" name="available_from" id="available_from" min="2023-10-27" max="2024-10-27" >
+            </p>
+            <p style="margin-left: 90px;">
+                <label for="available_from">Available to</label>
+            </p>
+            <p style="margin-left: 90px;">
+                <input type="date" name="available_to" id="available_to" min="2023-10-27" max="2024-10-27" >
+            </p>
 
-        <p>
-            <label for="available_to">Available to</label>
-            <input type="date" name="available_to" id="available_to" min="2023-10-26" max="2024-10-26" >
-        </p>
+        </div>
 
         <!-- SUBMIT BUTTON -->
-        <p>
+        <button type="submit" class="list_space_button" style="text-align: center; margin-bottom: 20px;">
+            List my Space
+        </button>
+
+        <!-- <p>
             <input type="submit" value="List my Space">
-        </p>
+        </p> -->
 
         </form>
     </div>
