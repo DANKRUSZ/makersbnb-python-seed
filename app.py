@@ -207,6 +207,7 @@ def single_space_page(id):
         listing_repository = ListingRepository(connection)
         listing = listing_repository.find(id)
 
+        #TODO
         #get all the available dates for the listing
 
         #get all the booked dates for the listing
@@ -218,17 +219,26 @@ def single_space_page(id):
         return redirect('/login')
 
 
-
-
 # ======== ALL REQUESTS, MAKER A REQUEST & INDIVIDUAL REQUEST ROUTES =================== #
 
 ## Make a request '/spaces/<id>' ['POST']
 @app.route('/spaces/<int:id>', methods=['POST'])
 def single_space_post_booking_request(id):
     connection = get_flask_database_connection(app)
-    date = request.form['selected_date'] 
-    return f"{date}"
+    repository = RequestRepository(connection)
 
+    #Get requested date & convert to datetime object
+    date_string = request.form['selected_date']
+    print(date_string)
+    date = datetime.strptime(date_string, '%Y-%m-%d %H:%M:%S')
+
+    #Get session users's id
+    requester_id = session.get('user_id')
+
+    #Create new request
+    request_id = repository.create(date_requested=date, listing_id=id, requester_id=requester_id, confirmed=None)
+    
+    return redirect(f'/requests/{request_id}')
 
 
 # All requests for the session user '/requests' ['GET']
@@ -237,15 +247,45 @@ def single_space_post_booking_request(id):
 def get_requests():
     connection = get_flask_database_connection(app)
     repository = RequestRepository(connection)
+
     requester_id = session.get('user_id')
     owner_id = session.get('user_id')
     requests_made = repository.requests_made(requester_id)
     requests_received = repository.requests_received(owner_id)
+
     return render_template('requests/requests.html', requests_made=requests_made, requests_received=requests_received)
 
 # Single request page '/requests/<id>' ['GET']
+@app.route('/requests/<int:id>')
+def single_request_get(id):
+    connection = get_flask_database_connection(app)
+    repository = RequestRepository(connection)
+    session_user = session.get('user_id')
+    # request = repository.find_this_request_details(id)
+    
+
+    if repository.check_if_owned_by(request_id=id, user_id=session_user):
+        return "You own this"
+        # other_requests = repository.find_other_requests(request)
+        # return render_template('requests/single_request_owner.html', this_request=request, other_requests=other_requests)
+
+    else:
+        return "You don't own this"
+        # listing_id = request['listing_id']
+        # print(listing_id)
+        # # owner_email = repository.find_owner_email(listing_id=request['listing_id']))
+        # return render_template('requests/single_request.html', this_request=request, owner_email=owner_email)
+
+
 ## Confirm request '/requests/<id>/confirm' ['POST']
+@app.route('/requests/<int:id>', methods=['POST'])
+def single_request_confirm_post(id):
+    pass
+
 ## Deny request '/requests/<id>/deny' ['POST']
+@app.route('/requests/<int:id>', methods=['POST'])
+def single_request_deny_post(id):
+    pass
 
 
 # ===================== EXAMPLE ROUTES =================================== #
