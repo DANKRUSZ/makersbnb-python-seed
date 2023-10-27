@@ -303,17 +303,20 @@ def single_request_get(id):
 ## Confirm request
 @app.route('/requests/<id>/confirm', methods=['POST'])
 def single_request_confirm_post(id):
-
+    ## @Daniel @Dave
+    # Should update the 'confirmed' column for requests to TRUE for WHERE requests.id = id
+    # Should update the 'request_id' column for dates_listings to id for WHERE listing_id =%s AND date_available =%s' [list_id of the request, date_requested of the request]
+    # should return redirect('/requests')
     choice = f"Confirm request #{id}"
     return choice
     
 
-
-
 ## Deny request
 @app.route('/requests/<id>/deny', methods=['POST'])
 def single_request_deny_post(id):
-
+    ## @Daniel @Dave
+    # Should update the 'confirmed' column for requests to FALSE for WHERE requests.id = id
+    # should return redirect('/requests')
     choice = f"Deny request #{id}"
     return choice
 
