@@ -20,26 +20,15 @@
         a:visited {
             color: black; /* Change this to your desired color */
         }
-        /* Increase the size of date input fields */
-        input[type="date"] {
-            width: 60%;
-            height: 25px; /* Adjust the height to your preference */
-        }
-        .all_requests_for_user {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* Two equal columns */
-            gap: 20px; /* Adjust the gap between columns */
-        }
-        .left-column, .right-column {
-            padding: 5px;
-        }
-        .requests_made, .requests_received {
-            height: 80%; /* Set a fixed height for the columns */
+        .other_requests{
+            height: 100%; /* Set a fixed height for the columns */
+            width: 40%;
             display: flex;
             flex-direction: column;
             padding: 5px;
             overflow: hidden; /* Hide overflowed content */
             border: 2px solid #000;
+            margin: 0 auto; /* Center the div horizontally */;
         }
         .individual_request {
             flex: 1;
@@ -72,61 +61,32 @@
 
 <!-------------------------- STOP COPYING TO EVERY PAGE -------------------------------->
 
-
     <br>
     <br>
 
-    <!-- REQUEST -->
-    <div class="request_copy" style="text-align: center;">
-        <h1 class="request_header">Request for {{this_request.title}}</h1>
-        <p class="request_description">
-            {{this_request.description}}
+    <!-- ALL REQUESTS -->
+    <div class="single_request" style="text-align: center;">
+        <h1 class="single_request_header">Request for '{{ this_request.title }}'</h1>
+        <p class="all_requests_blurb">
+            {{ this_request.description }}
         </p>
-        <div class="request_details" style="text-align: center; font-size: 20px;">
-            To: {{owner_email}} <br>
-            Date: {{this_request.date_requested}}
-        </div>
     </div>
-    <!-- REQUEST -->
+    <!-- ALL REQUESTS -->
 
     <br>
 
-    <!-- REQUESTS FOR USER -->
-    <div class="all_requests_for_user">
-
-        <!-- REQUESTS I'VE MADE -->
-        <div class="left-column">
-            <h3>Requests I've Made</h3>
-            <div class="requests_made" style="border: 2px solid #000; padding: 30px;">
-                {% for request in requests_made%}
-                    <a href="/requests/{{ request.id }}">
-                        <div class="individual_request" style="border: 2px solid #000; padding-left: 20px;">
-                            <h2 class="request-title">{{request.title}}</h2>
-                            <p class="requestp-confirmed">{{request.confirmed}}</p>
-                            <p class="request-date">{{request.date_requested}}</p>
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
-        </div>
-        <!-- REQUESTS I'VE MADE -->
-
-        <!-- REQUESTS I'VE RECEIVED -->
-        <div class="right-column">        
-            <h3>Requests I've Recieved</h3>
-                <div class="requests_received" style="border: 2px solid #000; padding: 30px;">
-                    {% for request in requests_received%}
-                        <a href="/requests/{{ request.id }}">
-                            <div class="individual_request" style="border: 2px solid #000; padding-left: 20px;">
-                                <h2 class="request-title">{{request.title}}</h2>
-                                <p class="requestp-confirmed">{{request.confirmed}}</p>
-                                <p class="request-date">{{request.date_requested}}</p>
-                            </div>
-                        </a>
-                    {% endfor %}
-            </div>
-        </div>
-        <!-- REQUESTS I'VE RECEIVED -->
+    <!-- THIS REQUEST DETAILS @DANIEL FILL IN HERE--> 
+    <div class="this_request_details" style="text-align: center;">
+        <p style="font-size: 20px;">
+            To: {{ this_request.owner_email }}
+        </p>
+        <p style="font-size: 20px;">
+            Date: {{ this_request.date_requested }}
+        </p>
+        <p style="font-size: 20px;">
+            Confirmation Status: {{ this_request.confirmation }}
+        </p>
+    </div>
 
 
     </div>
