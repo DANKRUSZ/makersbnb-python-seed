@@ -115,15 +115,16 @@ def all_spaces_page():
         if request.method == 'POST':
             date_from_string = request.form['date_from']
             date_to_string = request.form['date_to']
-            #TODO: error handling for blank fields;
-            #TODO: search_spaces = listing_repository.get_available_spaces(date_from, date_to)
-            # date_from = datetime.strptime(date_from_string, '%Y-%m-%d')
-            # date_to = datetime.strptime(date_to_string, '%Y-%m-%d')
-            # avail_spaces = listing_repository.get_available_spaces(date_from, date_to)
-            # return render_template('/spaces/all_spaces.html', spaces=avail_spaces)
-            return f"Date from: {date_from_string}, Date to: {date_to_string}"
-        
-            # return render_template('/spaces/all_spaces.html', spaces=searched_spaces)
+            print(f"Date from: {date_from_string}, Date to: {date_to_string}")
+            #TODO: error handling for blank fields or when date is invalid;
+
+
+
+            date_from = datetime.strptime(date_from_string, '%Y-%m-%d')
+            date_to = datetime.strptime(date_to_string, '%Y-%m-%d')
+            available_spaces = listing_repository.find_available_listings_for_dates(available_from=date_from, available_to=date_to)
+            return render_template('/spaces/all_spaces.html', spaces=available_spaces)
+            # return render_template('/spaces/all_spaces.html', spaces=searched_spaces, errors=generate_search_errors)
         else:
             return render_template('/spaces/all_spaces.html', spaces=spaces)
     else:
