@@ -3,48 +3,118 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Requests Page</title>
+        <title>Requests | Makersbnb</title>
+<!-------------------------- START COPYING TO EVERY PAGE -------------------------------->
 
-        <!--
-            Head to https://github.com/makersacademy/web-applications-in-python/blob/main/pills/loading_css_or_static_files.md
-            If you're wondering how the CSS file below is being loaded.
-        -->
-        <link rel="stylesheet" href="/static/style.css" >
-    </head>
-    <body>
+    <!-- IN-DOC STYLESHEET: -->
+    <style>
+        body {
+            font-size: 18px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 20px 30px; /* Add margin top/bottom, right/left */
+        }
+        /* LINK COLOUR */
+        a:link {
+            color: black; /* Change this to your desired color */
+        }
+        a:visited {
+            color: black; /* Change this to your desired color */
+        }
+        /* Increase the size of date input fields */
+        input[type="date"] {
+            width: 60%;
+            height: 25px; /* Adjust the height to your preference */
+        }
+        .all_requests_for_user {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two equal columns */
+            gap: 20px; /* Adjust the gap between columns */
+        }
+        .left-column, .right-column {
+            padding: 5px;
+        }
 
+    </style>
 
-        <!-- HEADER WITH AUTH -- copy to every page once this image is figured out -->
+    <!-- CSS STYLESHEET LINK NOT WORKING -->
+    <!-- <link rel="stylesheet" href="/style.css" /> -->
+</head>
+<body>
+    <!-- HEADER WITH AUTH -- copy to every page once this image is figured out -->
     <div class="header">
-        <!-- TODO: This image doesn't work -->
-        <img src="/makersbnb_routes_ticket/static/makers_logo_test.png" alt="Makers Logo">
-        <a class="spaces_link" href="/spaces">Spaces</a>
-        <a class="requests_link" href="/requests">Requests</a>
-        <a class="sign_out_link" href="/signout">Sign out</a>
+        <!-- LINKABLE LOGO -->
+        <a href="/" style="text-decoration: none;">
+            <div class="logo-container" style="float: left; background-color: black; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center;">
+                <span style="color: white; font-family: 'Comic Sans MS', cursive, sans-serif; font-size: 40px;">M</span>
+            </div>
+        </a>
+        <!-- HEADER LINKS -->
+        <div class="header_links" style="text-align: right;">
+            <a class="spaces_link" href="/spaces">Spaces</a> |
+            <a class="requests_link" href="/requests">Requests</a> |
+            <a class="sign_out_link" href="/signout">Sign out</a>
+        
     </div>
+    <!-- HEADER WITH AUTH-->
 
-    <div class="airbnb_copy">
-        <h1 class="airbnb_copy_slogan">Requests</h1>
+<!-------------------------- STOP COPYING TO EVERY PAGE -------------------------------->
+
+
+    <br>
+    <br>
+
+    <!-- ALL REQUESTS -->
+    <div class="all_requests_copy" style="text-align: center;">
+        <h1 class="all_requests_header">Requests</h1>
+        <p class="all_requests_blurb">
+            Anywhere can feel like home with Makersbnb.<br>
+            Here are all the booking requests you have made and recieved
+        </p>
+    </div>
+    <!-- ALL REQUESTS -->
+
+    <br>
+
+    <!-- REQUESTS FOR USER -->
+    <div class="all_requests_for_user">
+
+        <!-- REQUESTS I'VE MADE -->
+        <div class="left-column">
+            <h3>Requests I've Made</h3>
+            <div class="requests_made" style="border: 2px solid #000; padding: 30px;">
+                {% for request in requests_made%}
+                    <a href="/requests/{{ request.id }}">
+                        <div class="individual_request" style="border: 2px solid #000; padding-left: 20px;">
+                            <h2 class="request-title">{{request.title}}</h2>
+                            <p class="requestp-confirmed">{{request.confirmed}}</p>
+                            <p class="request-date">{{request.date_requested}}</p>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- REQUESTS I'VE MADE -->
+
+        <!-- REQUESTS I'VE RECEIVED -->
+        <div class="right-column">        
+            <h3>Requests I've Recieved</h3>
+                <div class="requests_received" style="border: 2px solid #000; padding: 30px;">
+                    {% for request in requests_received%}
+                        <a href="/requests/{{ request.id }}">
+                            <div class="individual_request" style="border: 2px solid #000; padding-left: 20px;">
+                                <h2 class="request-title">{{request.title}}</h2>
+                                <p class="requestp-confirmed">{{request.confirmed}}</p>
+                                <p class="request-date">{{request.date_requested}}</p>
+                            </div>
+                        </a>
+                    {% endfor %}
+            </div>
+        </div>
+        <!-- REQUESTS I'VE RECEIVED -->
+
+
+    </div>
+    <!-- REQUESTS FOR USER -->
     
-    </div>
-        <h2>Requests I've Made</h2>
-        {% for request in requests_made%}
-        <div>
-            Space: {{request.title}} <br>
-            Confirmation: {{request.confirmed}}<br>
-            Date: {{request.date_requested}}<br>
-            <br>
-        </div>
-        {% endfor %}
-
-        <h3>Requests I've Received</h3>
-        {% for request in requests_received%}
-        <div>
-            Space: {{request.title}} <br>
-            Confirmation: {{request.confirmed}}<br>
-            Date: {{request.date_requested}}<br>
-            <br>
-        </div>
-        {% endfor %}
     </body>
 </html>

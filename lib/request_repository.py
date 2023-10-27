@@ -91,11 +91,18 @@ class RequestRepository:
         rows = self._connection.execute(query, params)
         result = []
         for row in rows:
+            if row['confirmed'] == None:
+                confirmation = "Not confirmed"
+            elif row['confirmed'] == True:
+                confirmation = "Confirmed"
+            elif row['confirmed'] == False:
+                confirmation == "Denied"
+
             request = {'id': row['id'],
                     'date_requested': row['date_requested'],
                     'listing_id': row['listing_id'],
                     'requester_id': row['requester_id'],
-                    'confirmed': row['confirmed'],
+                    'confirmed': confirmation,
                     'title': row['title']
                     }
             result.append(request)
@@ -109,11 +116,18 @@ class RequestRepository:
         rows = self._connection.execute(query, params)
         result = []
         for row in rows:
+            if row['confirmed'] == None:
+                confirmation = "Not confirmed"
+            elif row['confirmed'] == True:
+                confirmation = "Confirmed"
+            elif row['confirmed'] == False:
+                confirmation == "Denied"
+
             request = {'id': row['id'],
                     'date_requested': row['date_requested'],
                     'listing_id': row['listing_id'],
                     'requester_id': row['requester_id'],
-                    'confirmed': row['confirmed'],
+                    'confirmed': confirmation,
                     'title': row['title']
                     }
             result.append(request)

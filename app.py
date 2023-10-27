@@ -178,8 +178,9 @@ def list_a_space_post():
     #convert strings to datetime objects
     available_from = datetime.strptime(available_from_string, '%Y-%m-%d') #error handling for blanks and invalid date is handled above
     available_to = datetime.strptime(available_to_string, '%Y-%m-%d') #error handling for blanks and invalid date is handled above
+    
     #convert price to integer
-    price = round(price_string) #error handling for float or non-numeric is handled above.
+    price = int(price_string) #error handling for float or non-numeric is handled above.
 
     #listing
     listing_id = listing_repository.create(title=title, description=description, price=price, owner_id=owner_id)
@@ -188,12 +189,12 @@ def list_a_space_post():
     #availability -- make a new available date for the new listing for each date in the date range, inclusive
     new_availability_date = available_from
     while new_availability_date <= available_to:
-        new_availability_id = availability_repository.create(date_available=new_availability_date, listing_id=listing_id, requester_id=None)
+        new_availability_id = availability_repository.create(date_available=new_availability_date, listing_id=listing_id, request_id=None)
         print(f"New availability date for listing {listing_id}, id: {new_availability_id}, date:{new_availability_date}")
         new_availability_date += timedelta(days=1)
     
-    # return redirect(f'/spaces/{listing_id}') #redirect to the new listing's page
-    return redirect('/spaces')
+    return redirect(f'/spaces/{listing_id}') #redirect to the new listing's page
+
 
 
 # Single space page '/spaces/<id>' ['GET']
