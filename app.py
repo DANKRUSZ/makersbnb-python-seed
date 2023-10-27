@@ -206,15 +206,22 @@ def single_space_page(id):
         connection = get_flask_database_connection(app)
         listing_repository = ListingRepository(connection)
         listing = listing_repository.find(id)
+        availability_repository = DateListingRepo(connection)
 
-        #TODO
-        #get all the available dates for the listing
+        #get all availabilities for this listing:
+        all_available_dates = availability_repository.find_availabilities(listing_id=listing.id)
+        print(all_available_dates)
 
         #get all the booked dates for the listing
+        booked_dates = [date['date'] for date in all_available_dates if date['request_id'] != None]
+        print(booked_dates)
 
         #find all free dates for the listing
+        free_dates = [date['date'] for date in all_available_dates if date['request_id'] == None]
+        print(free_dates)
 
-        return render_template('spaces/show_space2.html', listing=listing, free_dates=[datetime(2023,10,26)], booked_dates=[datetime(2023,10,27)])
+
+        return render_template('spaces/show_space2.html', listing=listing, free_dates=free_dates, booked_dates=booked_dates)
     else:
         return redirect('/login')
 
@@ -230,7 +237,7 @@ def single_space_post_booking_request(id):
     #Get requested date & convert to datetime object
     date_string = request.form['selected_date']
     print(date_string)
-    date = datetime.strptime(date_string, '%Y-%m-%d %H:%M:%S')
+    date = datetime.strptime(date_string, '%Y-%m-%d')
 
     #Get session users's id
     requester_id = session.get('user_id')
@@ -265,12 +272,15 @@ def single_request_get(id):
     
 
     if repository.check_if_owned_by(request_id=id, user_id=session_user):
-        return "You own this"
+        # return "You own this"
+        return render_template('requests/single_request_owner.html')
+        
         # other_requests = repository.find_other_requests(request)
         # return render_template('requests/single_request_owner.html', this_request=request, other_requests=other_requests)
 
     else:
-        return "You don't own this"
+        return render_template('requests/single_request_owner.html')
+        # return "You don't own this"
         # listing_id = request['listing_id']
         # print(listing_id)
         # # owner_email = repository.find_owner_email(listing_id=request['listing_id']))
@@ -301,4 +311,4 @@ def get_index():
 # They also start the server configured to use the test database
 # if started in test mode.
 if __name__ == '__main__':
-    app.run(debug=True, port=int(os.environ.get('PORT', 5001)))
+    app.run(debug=True, port=int(os.environ.get('PORT', 5000)))

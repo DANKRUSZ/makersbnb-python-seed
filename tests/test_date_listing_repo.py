@@ -32,6 +32,19 @@ def test_find_by_listing_id(db_connection):
     assert repository.find_by_listing_id(2) == [DateListing(2, date(2023,10,24), 2, None)]
     assert repository.find_by_listing_id(4) == [DateListing(4, date(2023,10,24), 4, None)]
 
+def test_find_availabilities(db_connection):
+    db_connection.seed("seeds/makers_bnb.sql")
+    repository = DateListingRepo(db_connection)
+
+    assert repository.find_availabilities(1) == [{
+                "date": date(2023, 10, 24),
+                "request_id": 1
+            }]
+    assert repository.find_availabilities(2) == [{
+                "date": date(2023, 10, 24),
+                "request_id": None
+            }]
+
 # ======= CREATE ======= #
 def test_create(db_connection):
     db_connection.seed("seeds/makers_bnb.sql")

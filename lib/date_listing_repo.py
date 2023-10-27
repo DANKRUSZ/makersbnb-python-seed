@@ -39,7 +39,7 @@ class DateListingRepo:
         return self.generate_single_datelisting(rows)
     
 
-        # Find datelisting by requester id
+    # Find datelisting by requester id
     def find_by_listing_id(self, listing_id:int) -> DateListing:
         query = 'SELECT * FROM dates_listings WHERE listing_id=%s'
         params = [listing_id]
@@ -47,6 +47,23 @@ class DateListingRepo:
         rows = self._connection.execute(query, params)
         return self.generate_datelistings(rows)
     
+
+    # Find availabilities for a listing
+    def find_availabilities(self, listing_id) -> list[dict]:
+        query = 'SELECT date_available, request_id FROM dates_listings WHERE listing_id=%s'
+        params = [listing_id]
+        dates = []
+        rows = self._connection.execute(query, params)
+        for row in rows:
+            date = {
+                "date": row['date_available'],
+                "request_id": row['request_id']
+            }
+            dates.append(date)
+        return dates
+
+
+
 
     # == CREATE NEW USER & ERRORS =============
 
@@ -99,7 +116,6 @@ class DateListingRepo:
                 errors.append("Date Available From cannot be blank")
             if available_to in [None, ""]:
                 errors.append("Date Available To cannot be blank")
-
         
         try:
             # Parse date strings into datetime objects
