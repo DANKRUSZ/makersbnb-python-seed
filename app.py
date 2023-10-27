@@ -33,6 +33,7 @@ def homepage():
 # Signup_Post -- Creating a new acc
 @app.route('/', methods=['POST'])
 def signup_post(): #aka create new user
+
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
     
@@ -55,7 +56,12 @@ def signup_post(): #aka create new user
 # Login Page
 @app.route('/login')
 def login():
-    return render_template('users/login.html')
+    # User in session
+    if session.get('user_id') is not None:
+        return redirect('/spaces') 
+
+    else:
+        return render_template('users/login.html')
 
 # Login_Post
 @app.route('/login', methods=['POST'])
@@ -268,34 +274,44 @@ def single_request_get(id):
     connection = get_flask_database_connection(app)
     repository = RequestRepository(connection)
     session_user = session.get('user_id')
-    # request = repository.find_this_request_details(id)
-    
 
+    # IF SESSION USER OWNS THIS LISTING
     if repository.check_if_owned_by(request_id=id, user_id=session_user):
-        # return "You own this"
-        return render_template('requests/single_request_owner.html')
         
-        # other_requests = repository.find_other_requests(request)
-        # return render_template('requests/single_request_owner.html', this_request=request, other_requests=other_requests)
+        # Get extended dictionary for this request, including listing_id, title, description
+        request_dict = repository.find_extended_details_for_request(request_id=id)
+        # Find the requester's email from their user_id. Add this to the request_dict
+        requester_email = repository.find_email_for_user(user_id=request_dict["requester_id"])
+        request_dict["requester_email"] = requester_email
 
+        # Find the details of the other requests, and format as cards on render template
+        other_requests = repository.find_other_requests(request_id=id)
+
+        return render_template('requests/single_request_owner.html', this_request=request_dict, other_requests=other_requests)
+
+    # IF SESSION USER DOES NOT OWN THIS LISTING
     else:
-        return render_template('requests/single_request_owner.html')
-        # return "You don't own this"
-        # listing_id = request['listing_id']
-        # print(listing_id)
-        # # owner_email = repository.find_owner_email(listing_id=request['listing_id']))
-        # return render_template('requests/single_request.html', this_request=request, owner_email=owner_email)
+        # Get extended dictionary for this request, including listing_id, title, description
+        request_dict = repository.find_extended_details_for_request(request_id=id)
+
+        # Find the owner's email from their user_id. Add this to the request_dict
+        owner_email = repository.find_email_for_user(user_id=request_dict["owner_id"])
+        request_dict["owner_email"] = owner_email
+
+        return render_template('requests/single_request.html', this_request=request_dict)
 
 
 ## Confirm request '/requests/<id>/confirm' ['POST']
 @app.route('/requests/<int:id>', methods=['POST'])
 def single_request_confirm_post(id):
-    pass
+    choice = f"Confirm request #{id}"
+    return choice
 
 ## Deny request '/requests/<id>/deny' ['POST']
 @app.route('/requests/<int:id>', methods=['POST'])
 def single_request_deny_post(id):
-    pass
+    choice = f"Deny request #{id}"
+    return choice
 
 
 # ===================== EXAMPLE ROUTES =================================== #

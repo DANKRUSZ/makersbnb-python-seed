@@ -84,8 +84,8 @@ class RequestRepository:
     
 
     # ===== CHECK REQUESTS RECEIVED =====
-    #TODO please update test for this
-    def requests_received(self, owner_id):
+    #TODO please update test for this 
+    def requests_received(self, owner_id) -> list[dict]: #extended details for each request for the preview cards
         query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title FROM requests JOIN listings ON requests.listing_id = listings.id WHERE listings.owner_id = %s'
         params = [owner_id]
 
@@ -111,7 +111,7 @@ class RequestRepository:
 
     # ===== CHECK REQUESTS I HAVE MADE =====
     #TODO please update test for this
-    def requests_made(self, requester_id):
+    def requests_made(self, requester_id) -> list[dict]: #extended details for each request for the preview cards
         query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title FROM requests JOIN listings ON requests.listing_id = listings.id WHERE requests.requester_id = %s'
         params = [requester_id]
 
@@ -146,13 +146,18 @@ class RequestRepository:
         return False
 
 
-    # ====== FIND THIS REQUEST & LISTING DETAILS ==========
-    #TODO Please write test for this
-    def find_this_request_details(self, request_id):
-        query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title, listings.description FROM requests JOIN listings ON requests.listing_id = listings.id WHERE requests.id = %s'
-        params = [id]
+
+    # ======= FIND OTHER REQUESTS FOR THIS LISTING ===========
+    def find_other_requests(self, request_id:int) -> list[dict]: #extended details for each request for the preview cards
+        current_request = self.find(request_id=request_id)
+        listing_id = current_request.listing_id
+
+        #find all request_details for requests for this listing that are NOT the current request
+        query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title FROM requests JOIN listings ON requests.listing_id = listings.id WHERE listings.id = %s AND requests.id != %s'
+        params = [listing_id, request_id]
 
         rows = self._connection.execute(query, params)
+        #generate details for the cards
         result = []
         for row in rows:
             if row['confirmed'] == None:
@@ -167,44 +172,48 @@ class RequestRepository:
                     'listing_id': row['listing_id'],
                     'requester_id': row['requester_id'],
                     'confirmed': confirmation,
-                    'title': row['title'],
-                    'description': row['description']
+                    'title': row['title']
                     }
             result.append(request)
-        return result[0]
+        return result
 
-    def find_owner_email(self, listing_id):
-        query = 'SELECT users.id, users.email FROM users JOIN listing ON listings.owner_id = users.id WHERE lists.id = %s'
-        params = [listing_id]
+
+
+
+
+# ================ START OVER HERE ====================================================================== #
+    #TODO Please write test for this
+    def find_extended_details_for_request(self, request_id): #extended details for each request for the preview cards
+        query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title, listings.description, listings.owner_id FROM requests JOIN listings ON requests.listing_id = listings.id WHERE requests.id = %s'
+        params = [request_id]
+
         rows = self._connection.execute(query, params)
-        return rows[0]['email']
+        result = []
+        for row in rows:
+            if row['confirmed'] == None:
+                confirmation = "Not confirmed"
+            elif row['confirmed'] == True:
+                confirmation = "Confirmed"
+            elif row['confirmed'] == False:
+                confirmation == "Denied"
 
+            request = {
+                "id": row["id"],
+                "title": row["title"],
+                "description": row["description"],
+                "date_requested": row["date_requested"],
+                "confirmation": confirmation,
+                "listing_id": row["listing_id"],
+                "requester_id": row["requester_id"],
+                "owner_id": row["owner_id"]
+            }
+            result.append(request)
+        return result[0]
+    
+    #TODO Please write test for this
+    def find_email_for_user(self, user_id):
+        query = 'SELECT email FROM users WHERE users.id =%s'
+        params = [user_id]
 
-    # # ====== FIND OTHER REQUESTS FOR THIS LISTING ==========
-    # #TODO Please write test for this
-    # def find_other_requests(self, request:Request):
-    #     listing_id = request.listing_id
-    #     this_request_id = request.id
-
-    #     query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title FROM requests JOIN listings ON requests.listing_id = listings.id WHERE listings.id = %s AND requests.id != %s'
-    #     params = [listing_id, this_request_id]
-
-    #     rows = self._connection.execute(query, params)
-    #     result = []
-    #     for row in rows:
-    #         if row['confirmed'] == None:
-    #             confirmation = "Not confirmed"
-    #         elif row['confirmed'] == True:
-    #             confirmation = "Confirmed"
-    #         elif row['confirmed'] == False:
-    #             confirmation == "Denied"
-
-    #         request = {'id': row['id'],
-    #                 'date_requested': row['date_requested'],
-    #                 'listing_id': row['listing_id'],
-    #                 'requester_id': row['requester_id'],
-    #                 'confirmed': confirmation,
-    #                 'title': row['title']
-    #                 }
-    #         result.append(request)
-    #     return result
+        rows = self._connection.execute(query,params)
+        return rows[0]["email"]
