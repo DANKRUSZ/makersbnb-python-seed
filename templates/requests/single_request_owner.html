@@ -35,7 +35,21 @@
             margin: 5px; /* Increase the padding to space out the sub-elements */
             overflow-y: auto;
         }
+        .button-container {
+        text-align: center; /* Center the buttons horizontally */
+        margin: 0 auto; /* Center the div horizontally */
+        }
 
+        .confirm_request_button, .deny_request_button {
+            background-color: transparent; /* Remove the background color */
+            border: 2px solid #000;
+            padding: 8px 15px;
+            box-shadow: 5px 5px 0px #000;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Set the font */
+            font-size: 18px;
+            margin: 10px; /* Add margin to space out the buttons horizontally */
+            width: 400px; /* Set the same width for both buttons */
+        }
     </style>
 
     <!-- CSS STYLESHEET LINK NOT WORKING -->
@@ -109,12 +123,25 @@
         </div>
         <!-- OTHER REQUESTS FOR THIS SPACE -->
 
-
+<br><br>
     </div>
 
     <!-- BUTTONS -->
-    
 
+    <div class="button-container">
+        <form class="confirm_request" action="/requests/{{ this_request.id }}/confirm" method="post">
+            <button type="submit" class="confirm_request_button">
+                Confirm Request from {{this_request.requester_email}}
+            </button>
+        </form>
     
+        <form class="deny_request" action="/requests/{{ this_request.id }}/deny" method="post">
+            <button type="submit" class="deny_request_button">
+                Deny Request from {{this_request.requester_email}}
+            </button>
+        </form>
+    </div>
+
+
     </body>
 </html>
