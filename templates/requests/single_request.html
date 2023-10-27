@@ -7,7 +7,7 @@
 <!-------------------------- START COPYING TO EVERY PAGE -------------------------------->
 
     <!-- IN-DOC STYLESHEET: -->
-    <style>
+    <!-- <style>
         body {
             font-size: 18px;
             font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -45,9 +45,61 @@
             flex: 1;
             margin: 5px; /* Increase the padding to space out the sub-elements */
             overflow-y: auto;
-        }
+        } -->
+    <!-- </style> -->
 
+    <style>
+        body {
+            font-size: 18px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            display: flex; /* Use flexbox to center content */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            height: 100vh; /* Make the body take up the full viewport height */
+            margin: 0; /* Remove default margin */
+        }
+    
+        /* LINK COLOUR */
+        a:link {
+            color: black; /* Change this to your desired color */
+        }
+    
+        a:visited {
+            color: black; /* Change this to your desired color */
+        }
+    
+        /* Increase the size of date input fields */
+        input[type="date"] {
+            width: 60%;
+            height: 25px; /* Adjust the height to your preference */
+        }
+    
+        .all_requests_for_user {
+            display: grid;
+            grid-template-columns: 1fr; /* Only one column */
+            gap: 20px; /* Adjust the gap between columns */
+        }
+    
+        .right-column {
+            padding: 5px;
+        }
+    
+        .requests_made, .requests_received {
+            height: 80%; /* Set a fixed height for the columns */
+            display: flex;
+            flex-direction: column;
+            padding: 5px;
+            overflow: hidden; /* Hide overflowed content */
+            border: 2px solid #000;
+        }
+    
+        .individual_request {
+            flex: 1;
+            margin: 5px; /* Increase the padding to space out the sub-elements */
+            overflow-y: auto;
+        }
     </style>
+    
 
     <!-- CSS STYLESHEET LINK NOT WORKING -->
     <!-- <link rel="stylesheet" href="/style.css" /> -->
@@ -95,7 +147,7 @@
     <div class="all_requests_for_user">
 
         <!-- REQUESTS I'VE MADE -->
-        <div class="left-column">
+        <!-- <div class="left-column">
             <h3>Requests I've Made</h3>
             <div class="requests_made" style="border: 2px solid #000; padding: 30px;">
                 {% for request in requests_made%}
@@ -107,7 +159,7 @@
                         </div>
                     </a>
                 {% endfor %}
-            </div>
+            </div> -->
         </div>
         <!-- REQUESTS I'VE MADE -->
 

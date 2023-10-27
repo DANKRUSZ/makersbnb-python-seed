@@ -261,13 +261,14 @@ def single_request_get(id):
     connection = get_flask_database_connection(app)
     repository = RequestRepository(connection)
     session_user = session.get('user_id')
-    # request = repository.find_this_request_details(id)
+    requests = repository.find_requester_email(id)
+    #request = repository.find_this_request_details(id)
     
 
     if repository.check_if_owned_by(request_id=id, user_id=session_user):
-        return "You own this"
-        # other_requests = repository.find_other_requests(request)
-        # return render_template('requests/single_request_owner.html', this_request=request, other_requests=other_requests)
+        #return "You own this"
+        requests_received = repository.requests_received(session_user)
+        return render_template('requests/single_request_owner.html', requests_received=requests_received, requests=requests)
 
     else:
         return "You don't own this"

@@ -86,7 +86,7 @@ class RequestRepository:
     # ===== CHECK REQUESTS RECEIVED =====
     #TODO please update test for this
     def requests_received(self, owner_id):
-        query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title FROM requests JOIN listings ON requests.listing_id = listings.id WHERE listings.owner_id = %s'
+        query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title, listings.description FROM requests JOIN listings ON requests.listing_id = listings.id WHERE listings.owner_id = %s'
         params = [owner_id]
 
         rows = self._connection.execute(query, params)
@@ -104,7 +104,8 @@ class RequestRepository:
                     'listing_id': row['listing_id'],
                     'requester_id': row['requester_id'],
                     'confirmed': confirmation,
-                    'title': row['title']
+                    'title': row['title'],
+                    'description': row['description']
                     }
             result.append(request)
         return result
@@ -150,7 +151,7 @@ class RequestRepository:
     #TODO Please write test for this
     def find_this_request_details(self, request_id):
         query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title, listings.description FROM requests JOIN listings ON requests.listing_id = listings.id WHERE requests.id = %s'
-        params = [id]
+        params = [request_id]
 
         rows = self._connection.execute(query, params)
         result = []
@@ -178,33 +179,52 @@ class RequestRepository:
         params = [listing_id]
         rows = self._connection.execute(query, params)
         return rows[0]['email']
+    
+    def find_requester_email(self, request_id):
+        query = 'SELECT requests.id, requests.requester_id, requests.date_requested, users.email FROM requests JOIN users ON requests.requester_id = users.id WHERE requests.id = %s'
+        params = [request_id]
+        rows = self._connection.execute(query, params)
+        result = []
+        for row in rows:
+            request = { 'id': row['id'],
+                    'requester_id': row['requester_id'],
+                    'date_requested': row['date_requested'],
+                    'email': row['email'],
+                    }
+            result.append(request)
+        return result
+    
+
+    def return_requester_id(self):
+        query = 'SELECT reuqester_id FROM requests' 
 
 
     # # ====== FIND OTHER REQUESTS FOR THIS LISTING ==========
-    # #TODO Please write test for this
-    # def find_other_requests(self, request:Request):
-    #     listing_id = request.listing_id
-    #     this_request_id = request.id
+    #TODO Please write test for this
+    def find_other_requests(self, request:Request):
+        pass
+        #listing_id = request.listing_id
+        #this_request_id = request.id
 
-    #     query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title FROM requests JOIN listings ON requests.listing_id = listings.id WHERE listings.id = %s AND requests.id != %s'
-    #     params = [listing_id, this_request_id]
+        #query = 'SELECT requests.id, requests.date_requested, requests.listing_id, requests.requester_id,requests.confirmed, listings.title FROM requests JOIN listings ON requests.listing_id = listings.id WHERE listings.id = %s AND requests.id != %s'
+        #params = [listing_id, this_request_id]
 
-    #     rows = self._connection.execute(query, params)
-    #     result = []
-    #     for row in rows:
-    #         if row['confirmed'] == None:
-    #             confirmation = "Not confirmed"
-    #         elif row['confirmed'] == True:
-    #             confirmation = "Confirmed"
-    #         elif row['confirmed'] == False:
-    #             confirmation == "Denied"
-
-    #         request = {'id': row['id'],
-    #                 'date_requested': row['date_requested'],
-    #                 'listing_id': row['listing_id'],
-    #                 'requester_id': row['requester_id'],
-    #                 'confirmed': confirmation,
-    #                 'title': row['title']
-    #                 }
-    #         result.append(request)
-    #     return result
+        #rows = self._connection.execute(query, params)
+        #result = []
+        #for row in rows:
+        #    if row['confirmed'] == None:
+        #        confirmation = "Not confirmed"
+        #    elif row['confirmed'] == True:
+        #        confirmation = "Confirmed"
+        #    elif row['confirmed'] == False:
+        #        confirmation == "Denied"
+#
+        #    request = {'id': row['id'],
+        #            'date_requested': row['date_requested'],
+        #            'listing_id': row['listing_id'],
+        #            'requester_id': row['requester_id'],
+        #            'confirmed': confirmation,
+        #            'title': row['title']
+        #            }
+        #    result.append(request)
+        #return result
