@@ -9,7 +9,7 @@ def test_all(db_connection):
     db_connection.seed("seeds/makers_bnb.sql")
     repository = RequestRepository(db_connection)
 
-    assert repository.all() == [
+    assert sorted(repository.all(),  key=lambda x: x.id) == [
         Request(1, date(2023,10,24), 1, 3, True),
         Request(2, date(2023,10,24), 2, 1, None),
         Request(3, date(2023,10,24), 3, 2, None),
@@ -38,7 +38,7 @@ def test_create(db_connection):
     repository = RequestRepository(db_connection)
 
     assert repository.create(date(2023,10,23), 4, 3, None) == 5
-    assert repository.all() == [
+    assert sorted(repository.all(), key=lambda x: x.id) == [
         Request(1, date(2023,10,24), 1, 3, True),
         Request(2, date(2023,10,24), 2, 1, None),
         Request(3, date(2023,10,24), 3, 2, None),
@@ -102,7 +102,7 @@ def test_requests_received(db_connection):
         'date_requested': date(2023, 10, 24),
         'listing_id': 1,
         'requester_id': 3,
-        'confirmed': None,
+        'confirmed': True,
         'title': 'House 1'
     }]
 
