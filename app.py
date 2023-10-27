@@ -300,18 +300,25 @@ def single_request_get(id):
 
         return render_template('requests/single_request.html', this_request=request_dict)
 
-
-## Confirm request '/requests/<id>/confirm' ['POST']
-@app.route('/requests/<int:id>', methods=['POST'])
+## Confirm request
+@app.route('/requests/<id>/confirm', methods=['POST'])
 def single_request_confirm_post(id):
+
     choice = f"Confirm request #{id}"
     return choice
+    
 
-## Deny request '/requests/<id>/deny' ['POST']
-@app.route('/requests/<int:id>', methods=['POST'])
+
+
+## Deny request
+@app.route('/requests/<id>/deny', methods=['POST'])
 def single_request_deny_post(id):
+
     choice = f"Deny request #{id}"
     return choice
+
+
+
 
 
 # ===================== EXAMPLE ROUTES =================================== #
