@@ -124,7 +124,6 @@ def all_spaces_page():
             date_to = datetime.strptime(date_to_string, '%Y-%m-%d')
             available_spaces = listing_repository.find_available_listings_for_dates(available_from=date_from, available_to=date_to)
             return render_template('/spaces/all_spaces.html', spaces=available_spaces)
-            # return render_template('/spaces/all_spaces.html', spaces=searched_spaces, errors=generate_search_errors)
         else:
             return render_template('/spaces/all_spaces.html', spaces=spaces)
     else:
