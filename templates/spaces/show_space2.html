@@ -93,7 +93,6 @@
                 <button type="submit" class="request_to_book_button" style="text-align: center; margin-bottom: 20px;">
                     Request to Book
                 </button>
-                <!-- <button type="submit">Request to Book Selected Date</button> -->
             </form>
             
             <script>
@@ -118,7 +117,7 @@
                             color: 'gray'
                         },
                         {% endfor %}
-
+                        // not booked dates -- free
                         {% for date in free_dates %}
                         {
                             title: 'Available',
